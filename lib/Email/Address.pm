@@ -1,12 +1,13 @@
 package Email::Address;
-# $Id: Address.pm,v 1.8 2004/10/22 16:39:14 cwest Exp $
 use strict;
 
 use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
             %PARSE_CACHE %FORMAT_CACHE %NAME_CACHE
             $addr_spec $angle_addr $name_addr $mailbox];
 
-$VERSION              = '1.80';
+my $NOCACHE;
+
+$VERSION              = '1.85';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -138,9 +139,30 @@ The reason for this hardly limiting limitation is simple: efficiency.
 
 =cut
 
-sub parse {
-    return @{$PARSE_CACHE{$_[1]}} if exists $PARSE_CACHE{$_[1]};
+sub __get_cached_parse {
+    return if $NOCACHE;
+
     my ($class, $line) = @_;
+
+    return @{$PARSE_CACHE{$line}} if exists $PARSE_CACHE{$line};
+    return; 
+}
+
+sub __cache_parse {
+    return if $NOCACHE;
+    
+    my ($class, $line, $addrs) = @_;
+
+    $PARSE_CACHE{$line} = $addrs;
+}
+
+sub parse {
+    my ($class, $line) = @_;
+
+    if (my @cached = $class->__get_cached_parse($line)) {
+        return @cached;
+    }
+
     my (@mailboxes) = ($line =~ /$mailbox/go);
     my @addrs;
     foreach (@mailboxes) {
@@ -167,8 +189,9 @@ sub parse {
       my $new_comment = join ' ', @comments;
       push @addrs, $class->new($phrase, "$user\@$host", $new_comment, $original);
     }
-    $PARSE_CACHE{$line} = [@addrs];
-    @addrs;
+
+    $class->__cache_parse($line, \@addrs);
+    return @addrs;
 }
 
 =pod
@@ -211,6 +234,26 @@ sub purge_cache {
     %NAME_CACHE   = ();
     %FORMAT_CACHE = ();
     %PARSE_CACHE  = ();
+}
+
+=item disable_cache
+
+=item enable_cache
+
+  Email::Address->disable_cache if memory_low();
+
+If you'd rather not cache address parses at all, you can disable (and reenable) the Email::Address cache with these methods.  The cache is enabled by default.
+
+=cut
+
+sub disable_cache {
+  my ($class) = @_;
+  $class->purge_cache;
+  $NOCACHE = 1;
+}
+
+sub enable_cache {
+  $NOCACHE = undef;
 }
 
 =pod
