@@ -442,8 +442,9 @@ Casey West, <F<casey@geeknest.com>>.
 
 =head1 COPYRIGHT
 
-  Copyright (c) 2004 Casey West.  All rights reserved.
-  This module is free software; you can redistribute it and/or modify it
-  under the same terms as Perl itself.
+  Copyright (c) 2004 Casey West.  All rights reserved.  This module is free
+  software; you can redistribute it and/or modify it under the same terms as
+  Perl itself.
 
 =cut
+
