@@ -1,0 +1,187 @@
+NAME
+    Email::Address - RFC 2822 Address Parsing and Creation
+
+SYNOPSIS
+      use Email::Address;
+
+      my @addresses = Email::Address->parse($line);
+      my $address   = Email::Address->new(Casey => 'casey@localhost');
+
+      print $address->format;
+
+DESCRIPTION
+    This class implements a complete RFC 2822 parser that locates email
+    addresses in strings and returns a list of "Email::Address" objects
+    found. Alternatley you may construct objects manually. The goal of this
+    software is to be correct, and very very fast.
+
+  Package Variables
+    Several regular expressions used in this package are useful to others.
+    For convenience, these variables are declared as package variables that
+    you may access from your program.
+
+    These regular expressions conform to the rules specified in RFC 2822.
+
+    You can access these variables using the full namespace. If you want
+    short names, define them yourself.
+
+      my $addr_spec = $Email::Address::addr_spec;
+
+    $Email::Address::addr_spec
+        This regular expression defined what an email address is allowed to
+        look like.
+
+    $Email::Address::angle_addr
+        This regular expression defines an $addr_spec wrapped in angle
+        brackets.
+
+    $Email::Address::name_addr
+        This regular expression defines what an email address can look like
+        with an optional preceeding display name, also known as the
+        "phrase".
+
+    $Email::Address::mailbox
+        This is the complete regular expression defining an RFC 2822 emial
+        address with an optional preceeding display name and optional
+        following comment.
+
+  Class Methods
+    parse
+          my @addrs = Email::Address->parse(
+              q[me@local, Casey <me@local>, "Casey" <me@local> (West)]
+          );
+
+        This method returns a list of "Email::Address" objects it finds in
+        the input string.
+
+        The specification for an email address allows for infinitley
+        nestable comments. That's nice in theory, but a little over done. By
+        default this module allows for two (2) levels of nested comments. If
+        you think you need more, modify the
+        $Email::Address::COMMENT_NEST_LEVEL package variable to allow more.
+
+          $Email::Address::COMMENT_NEST_LEVEL = 10; # I'm deep
+
+        The reason for this hardly limiting limitation is simple:
+        efficiency.
+
+    new
+          my $address = Email::Address->new(undef, 'casey@local');
+          my $address = Email::Address->new('Casey West', 'casey@local');
+          my $address = Email::Address->new(undef, 'casey@local', '(Casey)');
+
+        Constructs and returns a new "Email::Address" object. Takes four
+        positional arguments: phrase, email, and comment, and original
+        string.
+
+        The original string should only really be set using "parse".
+
+    purge_cache
+          Email::Address->purge_cache;
+
+        One way this module stays fast is with internal caches. Caches live
+        in memory and there is the remote possibility that you will have a
+        memory problem. In the off chance that you think you're one of those
+        people, this class method will empty those caches.
+
+        I've loaded over 12000 objects and not encountered a memory problem.
+
+  Instance Methods
+    phrase
+          my $phrase = $address->phrase;
+          $address->phrase( "Me oh my" );
+
+        Accessor and mutator for the phrase portion of an address.
+
+    address
+          my $addr = $address->address;
+          $addr->address( "me@PROTECTED.com" );
+
+        Accessor and mutator for the address portion of an address.
+
+    comment
+          my $comment = $address->comment;
+          $address->comment( "(Work address)" );
+
+        Accessor and mutator for the comment portion of an address.
+
+    original
+          my $orig = $address->original;
+
+        Accessor for the original address found when parsing, or passed to
+        "new".
+
+    host
+          my $host = $address->host;
+
+        Accessor for the host portion of an address's address.
+
+    user
+          my $user = $address->user;
+
+        Accessor for the user portion of an address's address.
+
+    format
+          my $printable = $address->format;
+
+        Returns a properly formatted RFC 2822 address representing the
+        object.
+
+    name
+          my $name = $address->name;
+
+        This method tries very hard to determine the name belonging to the
+        address. First the "phrase" is checked. If that doesn't work out the
+        "comment" is looked into. If that still doesn't work out, the "user"
+        portion of the "address" is returned.
+
+        This method does not try to massage any name it identifies and
+        instead leaves that up to someone else. Who is it to decide if
+        someone wants their name capitalized, or if they're Irish?
+
+  Overloaded Operators
+    stringify
+          print "I have your email address, $address.";
+
+        Objects stringify to "format" by default. It's possible that you
+        don't like that idea. Okay, then, you can change it by modifying
+        $Email:Address::STRINGIFY. Please consider modifying this package
+        variable using "local". You might step on someone else's toes if you
+        don't.
+
+          {
+            local $Email::Address::STRINGIFY = 'address';
+            print "I have your address, $address.";
+            #   geeknest.com
+          }
+          print "I have your address, $address.";
+          #   "Casey West" <casey@geeknest.com>
+
+  Did I Mention Fast?
+    On my 877Mhz 12" Apple Powerbook I can run the distributed benchmarks
+    and get results like this.
+
+      $ perl -Ilib bench/ea-vs-ma.pl bench/corpus.txt 5 
+                     s/iter  Mail::Address Email::Address
+      Mail::Address    1.59             --           -31%
+      Email::Address   1.10            45%             --
+      $ perl -Ilib bench/ea-vs-ma.pl bench/corpus.txt 25
+                     s/iter  Mail::Address Email::Address
+      Mail::Address    1.58             --           -60%
+      Email::Address  0.630           151%             --
+      $ perl -Ilib bench/ea-vs-ma.pl bench/corpus.txt 50
+                     s/iter  Mail::Address Email::Address
+      Mail::Address    1.58             --           -65%
+      Email::Address  0.558           182%             --
+
+SEE ALSO
+    Email::Simple, perl.
+
+AUTHOR
+    Casey West, <casey@geeknest.com>.
+
+COPYRIGHT
+      Copyright (c) 2004 Casey West.  All rights reserved.
+      This module is free software; you can redistribute it and/or modify it
+      under the same terms as Perl itself.
+
