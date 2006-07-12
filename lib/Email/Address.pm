@@ -7,7 +7,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.85';
+$VERSION              = '1.86';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -44,9 +44,9 @@ my $ctext          = qr/(?>[^()\\]+)/;
 my ($ccontent, $comment) = ('')x2;
 for (1 .. $COMMENT_NEST_LEVEL) {
    $ccontent       = qr/$ctext|$quoted_pair|$comment/;
-   $comment        = qr/\s*\((?:\s*$ccontent+)*\s*\)\s*/;
+   $comment        = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
 }
-my $cfws           = qr/$comment+|\s+/;
+my $cfws           = qr/$comment|\s+/;
 
 my $atext          = qq/[^$CTL$special\\s]/;
 my $atom           = qr/$cfws*$atext+$cfws*/;
@@ -63,7 +63,7 @@ my $phrase         = qr/$word+/;
 my $local_part     = qr/$dot_atom|$quoted_string/;
 my $dtext          = qr/[^\[\]\\]/;
 my $dcontent       = qr/$dtext|$quoted_pair/;
-my $domain_literal = qr/$cfws*\[(?:\s*$dcontent+)*\s*\]$cfws*/;
+my $domain_literal = qr/$cfws*\[(?:\s*$dcontent)*\s*\]$cfws*/;
 my $domain         = qr/$dot_atom|$domain_literal/;
 
 my $display_name   = $phrase;

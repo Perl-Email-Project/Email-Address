@@ -1,3 +1,10 @@
+1.86   2006-07-11
+
+  - tweak regex for approximate 50% performance boost
+    ...but bug 16320 is still true: Email::Address can be VERY slow
+    https://rt.cpan.org/Ticket/Display.html?id=16320
+  
+
 1.85   2006-07-07
 
   - add disable_cache and enable_cache methods (bug 19163, thanks ADAMK)
