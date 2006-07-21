@@ -432,6 +432,15 @@ get results like this.
   Mail::Address    1.58             --           -65%
   Email::Address  0.558           182%             --
 
+...unfortunately, a known bug causes a loss of speed the string to parse has
+certain known characteristics.
+
+=head1 PERL EMAIL PROJECT
+
+This module is maintained by the Perl Email Project
+
+  L<http://emailproject.perl.org/wiki/Email::Abstract>
+
 =head1 SEE ALSO
 
 L<Email::Simple>, L<perl>.

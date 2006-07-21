@@ -1,4 +1,4 @@
-1.86   2006-07-11
+1.86   2006-07-21
 
   - tweak regex for approximate 50% performance boost
     ...but bug 16320 is still true: Email::Address can be VERY slow
