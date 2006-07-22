@@ -401,8 +401,8 @@ don't.
 
 =cut
 
-sub as_string { no strict 'refs'; goto &{$STRINGIFY} };
-use overload '""' => \&as_string;
+#sub as_string { no strict 'refs'; goto &{$STRINGIFY} };
+use overload '""' => sub { no strict 'refs'; goto &{$STRINGIFY} };
 
 =pod
 
