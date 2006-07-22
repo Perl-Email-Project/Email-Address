@@ -439,7 +439,7 @@ certain known characteristics.
 
 This module is maintained by the Perl Email Project
 
-  L<http://emailproject.perl.org/wiki/Email::Abstract>
+  L<http://emailproject.perl.org/wiki/Email::Address>
 
 =head1 SEE ALSO
 
