@@ -7,7 +7,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.86';
+$VERSION              = '1.861';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -158,6 +158,7 @@ sub __cache_parse {
 
 sub parse {
     my ($class, $line) = @_;
+    return unless $line;
 
     if (my @cached = $class->__get_cached_parse($line)) {
         return @cached;

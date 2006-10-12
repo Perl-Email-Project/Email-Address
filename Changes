@@ -1,3 +1,8 @@
+1.861  2006-10-12
+
+  - don't bother trying to scan or warn about undef/empty parse string
+    (thanks, JESSE)
+
 1.86   2006-07-21
 
   - update docs
