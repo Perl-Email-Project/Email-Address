@@ -7,7 +7,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.861';
+$VERSION              = '1.871';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -402,7 +402,15 @@ don't.
 
 =cut
 
-#sub as_string { no strict 'refs'; goto &{$STRINGIFY} };
+sub as_string {
+  no strict 'refs';
+
+  warn 'altering $Email::Address::STRINGIFY is deprecated; subclass instead'
+    if $STRINGIFY ne 'format';
+
+  goto &{$STRINGIFY};
+}
+
 use overload '""' => sub { no strict 'refs'; goto &{$STRINGIFY} };
 
 =pod

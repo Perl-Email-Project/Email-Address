@@ -1,3 +1,10 @@
+1.871  2006-10-12
+
+  - previous version had been clobberred by apparently not-in-svn 1.870
+    it said:
+      - restore as_string
+      - issue deprecation warning if $STRINGIFY is changed
+
 1.861  2006-10-12
 
   - don't bother trying to scan or warn about undef/empty parse string
