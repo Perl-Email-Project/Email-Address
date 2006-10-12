@@ -1,4 +1,4 @@
-use Test::More tests => 873;
+use Test::More tests => 1091;
 use strict;
 $^W = 1;
 
@@ -1614,6 +1614,7 @@ for (@list) {
       isa_ok($_, 'Email::Address');
       my $test = shift @tests;
       is($_->format, $test->format, "format: " .$test->format);
+      is($_->as_string, $test->format, "format: " .$test->format);
       is("$_",       $test->format, "stringify: $_");
       is($_->name,   $test->name,   "name: " . $test->name);
   }
