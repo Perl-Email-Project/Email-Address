@@ -1,3 +1,7 @@
+1.880  2006-11-11
+  - resolve bug 22991, support obs-phrase construct
+    this creates a significant slowdown, sadly, but nothing to rival bug 16320
+
 1.871  2006-10-12
 
   - previous version had been clobberred by apparently not-in-svn 1.870

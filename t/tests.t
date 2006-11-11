@@ -1,4 +1,4 @@
-use Test::More tests => 1091;
+use Test::More tests => 1096;
 use strict;
 $^W = 1;
 
@@ -1584,6 +1584,16 @@ my @list = (
       ]
     ]
   ],
+  [ 
+    'Jason W. May <jmay-- ATAT --pobox.com>',                                   
+    [                                                                           
+      [                                                                         
+        'Jason W. May',                                                         
+        'jmay-- ATAT --pobox.com',                                              
+        undef                                                                   
+      ]                                                                         
+    ]                                                                           
+  ],                                                                            
   [
     '"Jason W. May" <jmay-- ATAT --pobox.com>, advocacy-- ATAT --perl.org',
     [

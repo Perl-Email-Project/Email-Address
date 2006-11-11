@@ -1,5 +1,7 @@
 package Email::Address;
 use strict;
+## no critic RequireUseWarnings
+# support pre-5.6
 
 use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
             %PARSE_CACHE %FORMAT_CACHE %NAME_CACHE
@@ -7,7 +9,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.871';
+$VERSION              = '1.880';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -23,6 +25,12 @@ Email::Address - RFC 2822 Address Parsing and Creation
   my $address   = Email::Address->new(Casey => 'casey@localhost');
 
   print $address->format;
+
+=head1 VERSION
+
+version 1.880
+
+ $Id$
 
 =head1 DESCRIPTION
 
@@ -41,7 +49,7 @@ my $text           = qr/[^\x0A\x0D]/;
 my $quoted_pair    = qr/\\$text/;
 
 my $ctext          = qr/(?>[^()\\]+)/;
-my ($ccontent, $comment) = ('')x2;
+my ($ccontent, $comment) = (q{})x2;
 for (1 .. $COMMENT_NEST_LEVEL) {
    $ccontent       = qr/$ctext|$quoted_pair|$comment/;
    $comment        = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
@@ -58,7 +66,13 @@ my $qcontent       = qr/$qtext|$quoted_pair/;
 my $quoted_string  = qr/$cfws*"$qcontent+"$cfws*/;
 
 my $word           = qr/$atom|$quoted_string/;
-my $phrase         = qr/$word+/;
+
+# XXX: This ($phrase) used to just be: my $phrase = qr/$word+/; It was changed
+# to resolve bug 22991, creating a significant slowdown.  Given current speed
+# problems.  Once 16320 is resolved, this section should be dealt with.
+# -- rjbs, 2006-11-11
+my $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
+my $phrase         = qr/$obs_phrase|(?:$word+)/;
 
 my $local_part     = qr/$dot_atom|$quoted_string/;
 my $dtext          = qr/[^\[\]\\]/;
@@ -187,7 +201,7 @@ sub parse {
         s/\s+$//;
       }
 
-      my $new_comment = join ' ', @comments;
+      my $new_comment = join q{ }, @comments;
       push @addrs, $class->new($phrase, "$user\@$host", $new_comment, $original);
     }
 
@@ -327,7 +341,7 @@ object.
 =cut
 
 sub format {
-    local $^W = 0;
+    local $^W = 0; ## no critic
     return $FORMAT_CACHE{"@{$_[0]}"} if exists $FORMAT_CACHE{"@{$_[0]}"};
     my ($self) = @_;
     my $format = sprintf '%s <%s> %s',
@@ -358,7 +372,7 @@ sub name {
     local $^W = 0;
     return $NAME_CACHE{"@{$_[0]}"} if exists $NAME_CACHE{"@{$_[0]}"};
     my ($self) = @_;
-    my $name = '';
+    my $name = q{};
     if ( $name = $self->[_PHRASE] ) {
         $name =~ s/^"//;
         $name =~ s/"$//;
@@ -403,15 +417,13 @@ don't.
 =cut
 
 sub as_string {
-  no strict 'refs';
-
   warn 'altering $Email::Address::STRINGIFY is deprecated; subclass instead'
     if $STRINGIFY ne 'format';
 
-  goto &{$STRINGIFY};
+  goto $_[0]->can($STRINGIFY);
 }
 
-use overload '""' => sub { no strict 'refs'; goto &{$STRINGIFY} };
+use overload '""' => 'as_string';
 
 =pod
 
