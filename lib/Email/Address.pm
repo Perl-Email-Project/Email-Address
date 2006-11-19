@@ -9,7 +9,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.880';
+$VERSION              = '1.881';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -28,7 +28,7 @@ Email::Address - RFC 2822 Address Parsing and Creation
 
 =head1 VERSION
 
-version 1.880
+version 1.881
 
  $Id$
 
@@ -71,7 +71,17 @@ my $word           = qr/$atom|$quoted_string/;
 # to resolve bug 22991, creating a significant slowdown.  Given current speed
 # problems.  Once 16320 is resolved, this section should be dealt with.
 # -- rjbs, 2006-11-11
-my $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
+#my $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
+
+# XXX: ...and the above solution caused endless problems (never returned) when
+# examining this address, now in a test:
+#   admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog-- ATAT --test.socialtext.com
+# So we disallow the hateful CFWS in this context for now.  Of modern mail
+# agents, only Apple Web Mail 2.0 is known to produce obs-phrase.
+# -- rjbs, 2006-11-19
+my $simple_word    = qr/$atom|\.|\s*"$qcontent+"\s*/;
+my $obs_phrase     = qr/$simple_word+/;
+
 my $phrase         = qr/$obs_phrase|(?:$word+)/;
 
 my $local_part     = qr/$dot_atom|$quoted_string/;

@@ -1,4 +1,4 @@
-use Test::More tests => 1096;
+use Test::More tests => 1101;
 use strict;
 $^W = 1;
 
@@ -1608,6 +1608,16 @@ my @list = (
         undef
       ]
     ]
+  ],
+  [
+    'admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog@test.socialtext.com',
+    [
+      [
+        undef,
+        'admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog-- ATAT --test.socialtext.com',
+        undef,
+      ],
+    ],
   ]
 );
 

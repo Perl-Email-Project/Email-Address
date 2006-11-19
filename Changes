@@ -1,3 +1,8 @@
+1.881  2006-11-11
+  - Basically: fixes a case where regex never returns.
+    resolve bug 23187 by slighly diluting the solution to 22991, which is a
+    more marginal problem than that of 23187, in practical terms
+
 1.880  2006-11-11
   - resolve bug 22991, support obs-phrase construct
     this creates a significant slowdown, sadly, but nothing to rival bug 16320
