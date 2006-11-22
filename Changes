@@ -1,4 +1,5 @@
-1.882  2006-11-21
+1.882  2006-11-22
+  - fix bug 21270, do not allow changes to objects to pollute the cache
   - packaging improvements
   - make test suite easier to manage
   - improve honesty of documentation (we are not complete, (yet))
