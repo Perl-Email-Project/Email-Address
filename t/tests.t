@@ -1,4 +1,4 @@
-use Test::More tests => 1101;
+use Test::More;
 use strict;
 $^W = 1;
 
@@ -15,121 +15,121 @@ my @list = (
     []
   ],
   [
-    '"\'\'\'advocacy-- ATAT --perl.org \' \' \'" <advocacy-- ATAT --perl.org>',
+    '"\'\'\'advocacy-- ATAT --p.example.org \' \' \'" <advocacy-- ATAT --p.example.org>',
     [
       [
-        '"\'\'\'advocacy-- ATAT --perl.org \' \' \'"',
-        'advocacy-- ATAT --perl.org',
+        '"\'\'\'advocacy-- ATAT --p.example.org \' \' \'"',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'\'advocacy-- ATAT --perl.org \' \'" <advocacy-- ATAT --perl.org>',
+    '"\'\'advocacy-- ATAT --p.example.org \' \'" <advocacy-- ATAT --p.example.org>',
     [
       [
-        '"\'\'advocacy-- ATAT --perl.org \' \'"',
-        'advocacy-- ATAT --perl.org',
+        '"\'\'advocacy-- ATAT --p.example.org \' \'"',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'. Jerry a\'" <JerryPanshen-- ATAT --aol.com>',
+    '"\'. Jerry a\'" <JerryPanshen-- ATAT --aol.example.aero>',
     [
       [
         '"\'. Jerry a\'"',
-        'JerryPanshen-- ATAT --aol.com',
+        'JerryPanshen-- ATAT --aol.example.aero',
         undef
       ]
     ]
   ],
   [
-    '"\'Adam Turoff\'" <adam.turoff-- ATAT --isinet.com>, advocacy-- ATAT --perl.org',
+    '"\'Adam Turoff\'" <adam.turoff-- ATAT --s.example.net>, advocacy-- ATAT --p.example.org',
     [
       [
         '"\'Adam Turoff\'"',
-        'adam.turoff-- ATAT --isinet.com',
+        'adam.turoff-- ATAT --s.example.net',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Andy Lester\'" <andy-- ATAT --petdance.com>, "\'Gabor Szabo\'" <gabor-- ATAT --tracert.com>, advocacy-- ATAT --perl.org',
+    '"\'Andy Lester\'" <andy-- ATAT --pet.example.com>, "\'Gabor Szabo\'" <gabor-- ATAT --trt.example.biz>, advocacy-- ATAT --p.example.org',
     [
       [
         '"\'Andy Lester\'"',
-        'andy-- ATAT --petdance.com',
+        'andy-- ATAT --pet.example.com',
         undef
       ],
       [
         '"\'Gabor Szabo\'"',
-        'gabor-- ATAT --tracert.com',
+        'gabor-- ATAT --trt.example.biz',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Ask Bjoern Hansen\'" <ask-- ATAT --perl.org>, <advocacy-- ATAT --perl.org>',
+    '"\'Ask Bjoern Hansen\'" <ask-- ATAT --p.example.org>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'Ask Bjoern Hansen\'"',
-        'ask-- ATAT --perl.org',
+        'ask-- ATAT --p.example.org',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Chris Nandor\'" <pudge-- ATAT --pobox.com> , "\'David E. Wheeler\'" <David-- ATAT --wheeler.net>',
+    '"\'Chris Nandor\'" <pudge-- ATAT --x.example.com> , "\'David E. Wheeler\'" <David-- ATAT --whl.example.net>',
     [
       [
         '"\'Chris Nandor\'"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
         '"\'David E. Wheeler\'"',
-        'David-- ATAT --wheeler.net',
+        'David-- ATAT --whl.example.net',
         undef
       ]
     ]
   ],
   [
-    '"\'Chris Nandor\'" <pudge-- ATAT --pobox.com> , "\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.wustl.edu>',
+    '"\'Chris Nandor\'" <pudge-- ATAT --x.example.com> , "\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.example.edu>',
     [
       [
         '"\'Chris Nandor\'"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
         '"\'Elaine -HFB- Ashton\'"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ]
     ]
   ],
   [
-    '"\'Chris Nandor\'" <pudge-- ATAT --pobox.com> , "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, <chip-- ATAT --valinux.com> , <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --perl.org>',
+    '"\'Chris Nandor\'" <pudge-- ATAT --x.example.com> , "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, <chip-- ATAT --valinux.com> , <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'Chris Nandor\'"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
@@ -149,68 +149,68 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Chris Nandor\'" <pudge-- ATAT --pobox.com>, <advocacy-- ATAT --perl.org>, <perl5-porters-- ATAT --perl.org>',
+    '"\'Chris Nandor\'" <pudge-- ATAT --x.example.com>, <advocacy-- ATAT --p.example.org>, <perl5-porters-- ATAT --p.example.org>',
     [
       [
         '"\'Chris Nandor\'"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
         undef,
-        'perl5-porters-- ATAT --perl.org',
+        'perl5-porters-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Chris Nandor\'" <pudge-- ATAT --pobox.com>, advocacy-- ATAT --perl.org',
+    '"\'Chris Nandor\'" <pudge-- ATAT --x.example.com>, advocacy-- ATAT --p.example.org',
     [
       [
         '"\'Chris Nandor\'"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Chris Nandor\'" <pudge-- ATAT --pobox.com>, advocacy-- ATAT --perl.org, perl5-porters-- ATAT --perl.org',
+    '"\'Chris Nandor\'" <pudge-- ATAT --x.example.com>, advocacy-- ATAT --p.example.org, perl5-porters-- ATAT --p.example.org',
     [
       [
         '"\'Chris Nandor\'"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
         undef,
-        'perl5-porters-- ATAT --perl.org',
+        'perl5-porters-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'David H. Adler \'" <dha-- ATAT --panix.com>, "\'advocacy-- ATAT --perl.org \'" <advocacy-- ATAT --perl.org>',
+    '"\'David H. Adler \'" <dha-- ATAT --panix.com>, "\'advocacy-- ATAT --p.example.org \'" <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'David H. Adler \'"',
@@ -218,14 +218,14 @@ my @list = (
         undef
       ],
       [
-        '"\'advocacy-- ATAT --perl.org \'"',
-        'advocacy-- ATAT --perl.org',
+        '"\'advocacy-- ATAT --p.example.org \'"',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Doucette, Bob\'" <BDoucette-- ATAT --tesent.com>, \'Rich Bowen\' <rbowen-- ATAT --rcbowen.com>',
+    '"\'Doucette, Bob\'" <BDoucette-- ATAT --tesent.com>, \'Rich Bowen\' <rbowen-- ATAT --rc.example.com>',
     [
       [
         '"\'Doucette, Bob\'"',
@@ -234,42 +234,42 @@ my @list = (
       ],
       [
         '\'Rich Bowen\'',
-        'rbowen-- ATAT --rcbowen.com',
+        'rbowen-- ATAT --rc.example.com',
         undef
       ]
     ]
   ],
   [
-    '"\'Elaine -HFB- Ashton \'" <elaine-- ATAT --chaos.wustl.edu>, "Turoff, Adam" <adam.turoff-- ATAT --isinet.com>',
+    '"\'Elaine -HFB- Ashton \'" <elaine-- ATAT --chaos.example.edu>, "Turoff, Adam" <adam.turoff-- ATAT --s.example.net>',
     [
       [
         '"\'Elaine -HFB- Ashton \'"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
         '"Turoff, Adam"',
-        'adam.turoff-- ATAT --isinet.com',
+        'adam.turoff-- ATAT --s.example.net',
         undef
       ]
     ]
   ],
   [
-    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.wustl.edu>',
+    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.example.edu>',
     [
       [
         '"\'Elaine -HFB- Ashton\'"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ]
     ]
   ],
   [
-    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.wustl.edu> , "\'Larry Wall\'" <larry-- ATAT --wall.org>',
+    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.example.edu> , "\'Larry Wall\'" <larry-- ATAT --wall.org>',
     [
       [
         '"\'Elaine -HFB- Ashton\'"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
@@ -280,46 +280,11 @@ my @list = (
     ]
   ],
   [
-    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.wustl.edu> , "\'Larry Wall\'" <larry-- ATAT --wall.org> , "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, <chip-- ATAT --valinux.com> , <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --perl.org>',
+    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.example.edu> , "\'Larry Wall\'" <larry-- ATAT --wall.org> , "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, <chip-- ATAT --valinux.com> , <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'Elaine -HFB- Ashton\'"',
-        'elaine-- ATAT --chaos.wustl.edu',
-        undef
-      ],
-      [
-        '"\'Larry Wall\'"',
-        'larry-- ATAT --wall.org',
-        undef
-      ],
-      [
-        '"\'Jon Orwant\'"',
-        'orwant-- ATAT --media.mit.edu',
-        undef
-      ],
-      [
-        undef,
-        'chip-- ATAT --valinux.com',
-        undef
-      ],
-      [
-        undef,
-        'tidbit-- ATAT --sri.net',
-        undef
-      ],
-      [
-        undef,
-        'advocacy-- ATAT --perl.org',
-        undef
-      ]
-    ]
-  ],
-  [
-    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.wustl.edu>, "\'Larry Wall\'" <larry-- ATAT --wall.org>, "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, <chip-- ATAT --valinux.com>, <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --perl.org>',
-    [
-      [
-        '"\'Elaine -HFB- Ashton\'"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
@@ -344,28 +309,63 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.wustl.edu>, <advocacy-- ATAT --perl.org>',
+    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.example.edu>, "\'Larry Wall\'" <larry-- ATAT --wall.org>, "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, <chip-- ATAT --valinux.com>, <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'Elaine -HFB- Ashton\'"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
+        undef
+      ],
+      [
+        '"\'Larry Wall\'"',
+        'larry-- ATAT --wall.org',
+        undef
+      ],
+      [
+        '"\'Jon Orwant\'"',
+        'orwant-- ATAT --media.mit.edu',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'chip-- ATAT --valinux.com',
+        undef
+      ],
+      [
+        undef,
+        'tidbit-- ATAT --sri.net',
+        undef
+      ],
+      [
+        undef,
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'John Porter\'" <jdporter-- ATAT --min.net>, "\'advocacy-- ATAT --perl.org\'" <advocacy-- ATAT --perl.org>',
+    '"\'Elaine -HFB- Ashton\'" <elaine-- ATAT --chaos.example.edu>, <advocacy-- ATAT --p.example.org>',
+    [
+      [
+        '"\'Elaine -HFB- Ashton\'"',
+        'elaine-- ATAT --chaos.example.edu',
+        undef
+      ],
+      [
+        undef,
+        'advocacy-- ATAT --p.example.org',
+        undef
+      ]
+    ]
+  ],
+  [
+    '"\'John Porter\'" <jdporter-- ATAT --min.net>, "\'advocacy-- ATAT --p.example.org\'" <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'John Porter\'"',
@@ -373,14 +373,14 @@ my @list = (
         undef
       ],
       [
-        '"\'advocacy-- ATAT --perl.org\'"',
-        'advocacy-- ATAT --perl.org',
+        '"\'advocacy-- ATAT --p.example.org\'"',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Larry Wall\'" <larry-- ATAT --wall.org> , "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, <chip-- ATAT --valinux.com> , <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --perl.org>',
+    '"\'Larry Wall\'" <larry-- ATAT --wall.org> , "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, <chip-- ATAT --valinux.com> , <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'Larry Wall\'"',
@@ -404,13 +404,13 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Madeline Schnapp \'" <madeline-- ATAT --oreilly.com>, "\'advocacy-- ATAT --perl.org \'" <advocacy-- ATAT --perl.org>',
+    '"\'Madeline Schnapp \'" <madeline-- ATAT --oreilly.com>, "\'advocacy-- ATAT --p.example.org \'" <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'Madeline Schnapp \'"',
@@ -418,8 +418,8 @@ my @list = (
         undef
       ],
       [
-        '"\'advocacy-- ATAT --perl.org \'"',
-        'advocacy-- ATAT --perl.org',
+        '"\'advocacy-- ATAT --p.example.org \'"',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
@@ -435,7 +435,7 @@ my @list = (
     ]
   ],
   [
-    '"\'Pamela Carter\'" <pcarter150-- ATAT --comcast.net>, <advocacy-- ATAT --perl.org>',
+    '"\'Pamela Carter\'" <pcarter150-- ATAT --comcast.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"\'Pamela Carter\'"',
@@ -444,7 +444,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
@@ -460,7 +460,7 @@ my @list = (
     ]
   ],
   [
-    '"\'Steve Lane\'" <sml-- ATAT --zfx.com>, "\'Chris Nandor\'" <pudge-- ATAT --pobox.com>, advocacy-- ATAT --perl.org, perl5-porters-- ATAT --perl.org',
+    '"\'Steve Lane\'" <sml-- ATAT --zfx.com>, "\'Chris Nandor\'" <pudge-- ATAT --x.example.com>, advocacy-- ATAT --p.example.org, perl5-porters-- ATAT --p.example.org',
     [
       [
         '"\'Steve Lane\'"',
@@ -469,23 +469,23 @@ my @list = (
       ],
       [
         '"\'Chris Nandor\'"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
         undef,
-        'perl5-porters-- ATAT --perl.org',
+        'perl5-porters-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'Tom Christiansen\'" <tchrist-- ATAT --chthon.perl.com>, Horsley Tom <Tom.Horsley-- ATAT --ccur.com>, "\'Steve Lane\'" <sml-- ATAT --zfx.com>, advocacy-- ATAT --perl.org, perl5-porters-- ATAT --perl.org',
+    '"\'Tom Christiansen\'" <tchrist-- ATAT --chthon.perl.com>, Horsley Tom <Tom.Horsley-- ATAT --ccur.com>, "\'Steve Lane\'" <sml-- ATAT --zfx.com>, advocacy-- ATAT --p.example.org, perl5-porters-- ATAT --p.example.org',
     [
       [
         '"\'Tom Christiansen\'"',
@@ -504,22 +504,22 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
         undef,
-        'perl5-porters-- ATAT --perl.org',
+        'perl5-porters-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'abigail-- ATAT --foad.org\'" <abigail-- ATAT --foad.org>,	 "Michael R. Wolf"<MichaelRunningWolf-- ATAT --att.net>',
+    '"\'abigail-- ATAT --foad.example.biz\'" <abigail-- ATAT --foad.example.biz>,	 "Michael R. Wolf"<MichaelRunningWolf-- ATAT --att.net>',
     [
       [
-        '"\'abigail-- ATAT --foad.org\'"',
-        'abigail-- ATAT --foad.org',
+        '"\'abigail-- ATAT --foad.example.biz\'"',
+        'abigail-- ATAT --foad.example.biz',
         undef
       ],
       [
@@ -530,36 +530,36 @@ my @list = (
     ]
   ],
   [
-    '"\'abigail-- ATAT --foad.org\'" <abigail-- ATAT --foad.org>, Michael G Schwern <schwern-- ATAT --pobox.com>',
+    '"\'abigail-- ATAT --foad.example.biz\'" <abigail-- ATAT --foad.example.biz>, Michael G Schwern <schwern-- ATAT --x.example.com>',
     [
       [
-        '"\'abigail-- ATAT --foad.org\'"',
-        'abigail-- ATAT --foad.org',
+        '"\'abigail-- ATAT --foad.example.biz\'"',
+        'abigail-- ATAT --foad.example.biz',
         undef
       ],
       [
         'Michael G Schwern',
-        'schwern-- ATAT --pobox.com',
+        'schwern-- ATAT --x.example.com',
         undef
       ]
     ]
   ],
   [
-    '"\'abigail-- ATAT --foad.org\'" <abigail-- ATAT --foad.org>, Michael G Schwern <schwern-- ATAT --pobox.com>, Nicholas Clark <nick-- ATAT --ccl4.org>, Piers Cawley <pdcawley-- ATAT --bofh.org.uk>, advocacy-- ATAT --perl.org',
+    '"\'abigail-- ATAT --foad.example.biz\'" <abigail-- ATAT --foad.example.biz>, Michael G Schwern <schwern-- ATAT --x.example.com>, Nicholas Clark <nick-- ATAT --c.example.org>, Piers Cawley <pdcawley-- ATAT --bofh.org.uk>, advocacy-- ATAT --p.example.org',
     [
       [
-        '"\'abigail-- ATAT --foad.org\'"',
-        'abigail-- ATAT --foad.org',
+        '"\'abigail-- ATAT --foad.example.biz\'"',
+        'abigail-- ATAT --foad.example.biz',
         undef
       ],
       [
         'Michael G Schwern',
-        'schwern-- ATAT --pobox.com',
+        'schwern-- ATAT --x.example.com',
         undef
       ],
       [
         'Nicholas Clark',
-        'nick-- ATAT --ccl4.org',
+        'nick-- ATAT --c.example.org',
         undef
       ],
       [
@@ -569,48 +569,48 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'advocacy-- ATAT --perl.org \'" <advocacy-- ATAT --perl.org>',
+    '"\'advocacy-- ATAT --p.example.org \'" <advocacy-- ATAT --p.example.org>',
     [
       [
-        '"\'advocacy-- ATAT --perl.org \'"',
-        'advocacy-- ATAT --perl.org',
+        '"\'advocacy-- ATAT --p.example.org \'"',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'advocacy-- ATAT --perl.org \'" <advocacy-- ATAT --perl.org>, "Turoff, Adam" <adam.turoff-- ATAT --isinet.com>',
+    '"\'advocacy-- ATAT --p.example.org \'" <advocacy-- ATAT --p.example.org>, "Turoff, Adam" <adam.turoff-- ATAT --s.example.net>',
     [
       [
-        '"\'advocacy-- ATAT --perl.org \'"',
-        'advocacy-- ATAT --perl.org',
+        '"\'advocacy-- ATAT --p.example.org \'"',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
         '"Turoff, Adam"',
-        'adam.turoff-- ATAT --isinet.com',
+        'adam.turoff-- ATAT --s.example.net',
         undef
       ]
     ]
   ],
   [
-    '"\'advocacy-- ATAT --perl.org\'" <advocacy-- ATAT --perl.org>',
+    '"\'advocacy-- ATAT --p.example.org\'" <advocacy-- ATAT --p.example.org>',
     [
       [
-        '"\'advocacy-- ATAT --perl.org\'"',
-        'advocacy-- ATAT --perl.org',
+        '"\'advocacy-- ATAT --p.example.org\'"',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'bwarnock-- ATAT --capita.com\'" <bwarnock-- ATAT --capita.com>, advocacy-- ATAT --perl.org',
+    '"\'bwarnock-- ATAT --capita.com\'" <bwarnock-- ATAT --capita.com>, advocacy-- ATAT --p.example.org',
     [
       [
         '"\'bwarnock-- ATAT --capita.com\'"',
@@ -619,17 +619,17 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"\'duff-- ATAT --pobox.com\'" <duff-- ATAT --pobox.com>',
+    '"\'duff-- ATAT --x.example.com\'" <duff-- ATAT --x.example.com>',
     [
       [
-        '"\'duff-- ATAT --pobox.com\'"',
-        'duff-- ATAT --pobox.com',
+        '"\'duff-- ATAT --x.example.com\'"',
+        'duff-- ATAT --x.example.com',
         undef
       ]
     ]
@@ -655,7 +655,7 @@ my @list = (
     ]
   ],
   [
-    '"\'perl-hackers-- ATAT --stlouis.pm.org\'" <perl-hackers-- ATAT --stlouis.pm.org>, advocacy-- ATAT --perl.org, marsneedswomen-- ATAT --happyfunball.pm.org',
+    '"\'perl-hackers-- ATAT --stlouis.pm.org\'" <perl-hackers-- ATAT --stlouis.pm.org>, advocacy-- ATAT --p.example.org, marsneedswomen-- ATAT --happyfunball.pm.org',
     [
       [
         '"\'perl-hackers-- ATAT --stlouis.pm.org\'"',
@@ -664,7 +664,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
@@ -675,41 +675,41 @@ my @list = (
     ]
   ],
   [
-    '"<advocacy-- ATAT --perl.org>" <advocacy-- ATAT --perl.org>',
+    '"<advocacy-- ATAT --p.example.org>" <advocacy-- ATAT --p.example.org>',
     [
       [
         'advocacy',
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Adam Turoff" <adam.turoff-- ATAT --isinet.com>, "Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>',
+    '"Adam Turoff" <adam.turoff-- ATAT --s.example.net>, "Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>',
     [
       [
         '"Adam Turoff"',
-        'adam.turoff-- ATAT --isinet.com',
+        'adam.turoff-- ATAT --s.example.net',
         undef
       ],
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ]
     ]
   ],
   [
-    '"Adam Turoff" <adam.turoff-- ATAT --isinet.com>, "Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>, "Brent Michalski" <brent-- ATAT --perlguy.net>, "Madeline Schnapp" <madeline-- ATAT --oreilly.com>, <advocacy-- ATAT --perl.org>, <betsy-- ATAT --oreilly.com>',
+    '"Adam Turoff" <adam.turoff-- ATAT --s.example.net>, "Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>, "Brent Michalski" <brent-- ATAT --perlguy.net>, "Madeline Schnapp" <madeline-- ATAT --oreilly.com>, <advocacy-- ATAT --p.example.org>, <betsy-- ATAT --oreilly.com>',
     [
       [
         '"Adam Turoff"',
-        'adam.turoff-- ATAT --isinet.com',
+        'adam.turoff-- ATAT --s.example.net',
         undef
       ],
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
@@ -724,7 +724,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
@@ -735,76 +735,76 @@ my @list = (
     ]
   ],
   [
-    '"Adam Turoff" <adam.turoff-- ATAT --isinet.com>, "Paul Prescod" <paul-- ATAT --prescod.net>',
+    '"Adam Turoff" <adam.turoff-- ATAT --s.example.net>, "Paul Prescod" <paul-- ATAT --co.example.va>',
     [
       [
         '"Adam Turoff"',
-        'adam.turoff-- ATAT --isinet.com',
+        'adam.turoff-- ATAT --s.example.net',
         undef
       ],
       [
         '"Paul Prescod"',
-        'paul-- ATAT --prescod.net',
+        'paul-- ATAT --co.example.va',
         undef
       ]
     ]
   ],
   [
-    '"Alan Olsen" <alan-- ATAT --clueserver.org>, "Rich Bowen" <rbowen-- ATAT --rcbowen.com>',
+    '"Alan Olsen" <alan-- ATAT --svr.example.museum>, "Rich Bowen" <rbowen-- ATAT --rc.example.com>',
     [
       [
         '"Alan Olsen"',
-        'alan-- ATAT --clueserver.org',
+        'alan-- ATAT --svr.example.museum',
         undef
       ],
       [
         '"Rich Bowen"',
-        'rbowen-- ATAT --rcbowen.com',
+        'rbowen-- ATAT --rc.example.com',
         undef
       ]
     ]
   ],
   [
-    '"Andreas J. Koenig" <andreas.koenig-- ATAT --anima.de>',
+    '"Andreas J. Koenig" <andreas.koenig-- ATAT --example.net>',
     [
       [
         '"Andreas J. Koenig"',
-        'andreas.koenig-- ATAT --anima.de',
+        'andreas.koenig-- ATAT --example.net',
         undef
       ]
     ]
   ],
   [
-    '"Andreas J. Koenig" <andreas.koenig-- ATAT --anima.de>, advocacy-- ATAT --perl.org',
+    '"Andreas J. Koenig" <andreas.koenig-- ATAT --example.net>, advocacy-- ATAT --p.example.org',
     [
       [
         '"Andreas J. Koenig"',
-        'andreas.koenig-- ATAT --anima.de',
+        'andreas.koenig-- ATAT --example.net',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Andreas J. Koenig" <andreas.koenig-- ATAT --anima.de>, advocacy-- ATAT --perl.org, regn-- ATAT --ActiveState.com',
+    '"Andreas J. Koenig" <andreas.koenig-- ATAT --example.net>, advocacy-- ATAT --p.example.org, regn-- ATAT --ExamPle.com',
     [
       [
         '"Andreas J. Koenig"',
-        'andreas.koenig-- ATAT --anima.de',
+        'andreas.koenig-- ATAT --example.net',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
         undef,
-        'regn-- ATAT --ActiveState.com',
+        'regn-- ATAT --ExamPle.com',
         undef
       ]
     ]
@@ -840,7 +840,7 @@ my @list = (
     ]
   ],
   [
-    '"Betsy Waliszewski" <betsy-- ATAT --oreilly.com>, "perl-advocacy" <advocacy-- ATAT --perl.org>',
+    '"Betsy Waliszewski" <betsy-- ATAT --oreilly.com>, "perl-advocacy" <advocacy-- ATAT --p.example.org>',
     [
       [
         '"Betsy Waliszewski"',
@@ -849,7 +849,7 @@ my @list = (
       ],
       [
         '"perl-advocacy"',
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
@@ -875,7 +875,7 @@ my @list = (
     ]
   ],
   [
-    '"Brent Michalski" <brent-- ATAT --perlguy.net>, "Madeline Schnapp" <madeline-- ATAT --oreilly.com>, <advocacy-- ATAT --perl.org>, <betsy-- ATAT --oreilly.com>',
+    '"Brent Michalski" <brent-- ATAT --perlguy.net>, "Madeline Schnapp" <madeline-- ATAT --oreilly.com>, <advocacy-- ATAT --p.example.org>, <betsy-- ATAT --oreilly.com>',
     [
       [
         '"Brent Michalski"',
@@ -889,7 +889,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
@@ -910,7 +910,7 @@ my @list = (
     ]
   ],
   [
-    '"Calvin Lee" <bodyshock911-- ATAT --hotmail.com>, <advocacy-- ATAT --perl.org>',
+    '"Calvin Lee" <bodyshock911-- ATAT --hotmail.com>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"Calvin Lee"',
@@ -919,13 +919,13 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Calvin Lee" <bodyshock911-- ATAT --hotmail.com>, advocacy-- ATAT --perl.org',
+    '"Calvin Lee" <bodyshock911-- ATAT --hotmail.com>, advocacy-- ATAT --p.example.org',
     [
       [
         '"Calvin Lee"',
@@ -934,7 +934,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
@@ -950,7 +950,7 @@ my @list = (
     ]
   ],
   [
-    '"Chip Salzenberg" <chip-- ATAT --valinux.com>, "Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>',
+    '"Chip Salzenberg" <chip-- ATAT --valinux.com>, "Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>',
     [
       [
         '"Chip Salzenberg"',
@@ -959,7 +959,7 @@ my @list = (
       ],
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ]
     ]
@@ -980,21 +980,21 @@ my @list = (
     ]
   ],
   [
-    '"Chris Nandor" <pudge-- ATAT --pobox.com>',
+    '"Chris Nandor" <pudge-- ATAT --x.example.com>',
     [
       [
         '"Chris Nandor"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ]
     ]
   ],
   [
-    '"Chris Nandor" <pudge-- ATAT --pobox.com>, "Nathan Torkington" <gnat-- ATAT --frii.com>, "Peter Scott" <Peter-- ATAT --PSDT.com>',
+    '"Chris Nandor" <pudge-- ATAT --x.example.com>, "Nathan Torkington" <gnat-- ATAT --frii.com>, "Peter Scott" <Peter-- ATAT --PSDT.com>',
     [
       [
         '"Chris Nandor"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
@@ -1010,11 +1010,11 @@ my @list = (
     ]
   ],
   [
-    '"Chris Nandor" <pudge-- ATAT --pobox.com>, "Nathan Torkington" <gnat-- ATAT --frii.com>, <advocacy-- ATAT --perl.org>, "Peter Scott" <Peter-- ATAT --PSDT.com>',
+    '"Chris Nandor" <pudge-- ATAT --x.example.com>, "Nathan Torkington" <gnat-- ATAT --frii.com>, <advocacy-- ATAT --p.example.org>, "Peter Scott" <Peter-- ATAT --PSDT.com>',
     [
       [
         '"Chris Nandor"',
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
@@ -1024,7 +1024,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
@@ -1045,7 +1045,7 @@ my @list = (
     ]
   ],
   [
-    '"Clinton A. Pierce" <clintp-- ATAT --geeksalad.org>, madeline-- ATAT --oreilly.com, pudge-- ATAT --pobox.com, advocacy-- ATAT --perl.org',
+    '"Clinton A. Pierce" <clintp-- ATAT --geeksalad.org>, madeline-- ATAT --oreilly.com, pudge-- ATAT --x.example.com, advocacy-- ATAT --p.example.org',
     [
       [
         '"Clinton A. Pierce"',
@@ -1059,18 +1059,18 @@ my @list = (
       ],
       [
         undef,
-        'pudge-- ATAT --pobox.com',
+        'pudge-- ATAT --x.example.com',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Curtis Poe" <cp-- ATAT --onsitetech.com>, <advocacy-- ATAT --perl.org>',
+    '"Curtis Poe" <cp-- ATAT --onsitetech.com>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"Curtis Poe"',
@@ -1079,13 +1079,13 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Curtis Poe" <cp-- ATAT --onsitetech.com>, advocacy-- ATAT --perl.org',
+    '"Curtis Poe" <cp-- ATAT --onsitetech.com>, advocacy-- ATAT --p.example.org',
     [
       [
         '"Curtis Poe"',
@@ -1094,7 +1094,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
@@ -1120,7 +1120,7 @@ my @list = (
     ]
   ],
   [
-    '"David E. Wheeler" <David-- ATAT --Wheeler.net>, "\'Larry Wall\'" <larry-- ATAT --wall.org>, "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, chip-- ATAT --valinux.com, tidbit-- ATAT --sri.net, advocacy-- ATAT --perl.org',
+    '"David E. Wheeler" <David-- ATAT --Wheeler.net>, "\'Larry Wall\'" <larry-- ATAT --wall.org>, "\'Jon Orwant\'" <orwant-- ATAT --media.mit.edu>, chip-- ATAT --valinux.com, tidbit-- ATAT --sri.net, advocacy-- ATAT --p.example.org',
     [
       [
         '"David E. Wheeler"',
@@ -1149,13 +1149,13 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"David E. Wheeler" <David-- ATAT --Wheeler.net>, \'Elaine -HFB- Ashton\' <elaine-- ATAT --chaos.wustl.edu>, \'Larry Wall\' <larry-- ATAT --wall.org>, \'Jon Orwant\' <orwant-- ATAT --media.mit.edu>, tidbit-- ATAT --sri.net, advocacy-- ATAT --perl.org',
+    '"David E. Wheeler" <David-- ATAT --Wheeler.net>, \'Elaine -HFB- Ashton\' <elaine-- ATAT --chaos.example.edu>, \'Larry Wall\' <larry-- ATAT --wall.org>, \'Jon Orwant\' <orwant-- ATAT --media.mit.edu>, tidbit-- ATAT --sri.net, advocacy-- ATAT --p.example.org',
     [
       [
         '"David E. Wheeler"',
@@ -1164,7 +1164,7 @@ my @list = (
       ],
       [
         '\'Elaine -HFB- Ashton\'',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
@@ -1184,7 +1184,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
@@ -1200,7 +1200,7 @@ my @list = (
     ]
   ],
   [
-    '"David Grove" <pete-- ATAT --petes-place.com>, <advocacy-- ATAT --perl.org>',
+    '"David Grove" <pete-- ATAT --petes-place.com>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"David Grove"',
@@ -1209,7 +1209,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
@@ -1225,7 +1225,7 @@ my @list = (
     ]
   ],
   [
-    '"David H. Adler" <dha-- ATAT --panix.com>, <advocacy-- ATAT --perl.org>, <simon-- ATAT --brecon.co.uk>',
+    '"David H. Adler" <dha-- ATAT --panix.com>, <advocacy-- ATAT --p.example.org>, <simon-- ATAT --brecon.co.uk>',
     [
       [
         '"David H. Adler"',
@@ -1234,7 +1234,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
@@ -1245,7 +1245,7 @@ my @list = (
     ]
   ],
   [
-    '"David H. Adler" <dha-- ATAT --panix.com>, advocacy-- ATAT --perl.org',
+    '"David H. Adler" <dha-- ATAT --panix.com>, advocacy-- ATAT --p.example.org',
     [
       [
         '"David H. Adler"',
@@ -1254,13 +1254,13 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"David H. Adler" <dha-- ATAT --panix.com>, advocacy-- ATAT --perl.org, perl5-porters-- ATAT --perl.org',
+    '"David H. Adler" <dha-- ATAT --panix.com>, advocacy-- ATAT --p.example.org, perl5-porters-- ATAT --p.example.org',
     [
       [
         '"David H. Adler"',
@@ -1269,18 +1269,18 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ],
       [
         undef,
-        'perl5-porters-- ATAT --perl.org',
+        'perl5-porters-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"David H. Adler" <dha-- ATAT --panix.com>,advocacy-- ATAT --perl.org',
+    '"David H. Adler" <dha-- ATAT --panix.com>,advocacy-- ATAT --p.example.org',
     [
       [
         '"David H. Adler"',
@@ -1289,7 +1289,7 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
@@ -1305,21 +1305,21 @@ my @list = (
     ]
   ],
   [
-    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>',
+    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>',
     [
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ]
     ]
   ],
   [
-    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>, "Brent Michalski" <brent-- ATAT --perlguy.net>',
+    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>, "Brent Michalski" <brent-- ATAT --perlguy.net>',
     [
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
@@ -1330,26 +1330,26 @@ my @list = (
     ]
   ],
   [
-    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>, "Frank Schmuck, CFO" <fschmuck-- ATAT --lcch.org>',
+    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>, "Frank Schmuck, CFO" <fschmuck-- ATAT --l.example.org>',
     [
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
         '"Frank Schmuck, CFO"',
-        'fschmuck-- ATAT --lcch.org',
+        'fschmuck-- ATAT --l.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>, "Peter Scott" <Peter-- ATAT --PSDT.com>',
+    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>, "Peter Scott" <Peter-- ATAT --PSDT.com>',
     [
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
@@ -1360,11 +1360,11 @@ my @list = (
     ]
   ],
   [
-    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>, "Tom Christiansen" <tchrist-- ATAT --chthon.perl.com>, <Ben_Tilly-- ATAT --trepp.com>, "David H. Adler" <dha-- ATAT --panix.com>, <advocacy-- ATAT --perl.org>',
+    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>, "Tom Christiansen" <tchrist-- ATAT --chthon.perl.com>, <Ben_Tilly-- ATAT --trepp.com>, "David H. Adler" <dha-- ATAT --panix.com>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
@@ -1384,17 +1384,17 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>, "brian d foy" <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --perl.org>',
+    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>, "brian d foy" <tidbit-- ATAT --sri.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
@@ -1404,222 +1404,227 @@ my @list = (
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.wustl.edu>, <advocacy-- ATAT --perl.org>',
+    '"Elaine -HFB- Ashton" <elaine-- ATAT --chaos.example.edu>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"Elaine -HFB- Ashton"',
-        'elaine-- ATAT --chaos.wustl.edu',
+        'elaine-- ATAT --chaos.example.edu',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Frank Schmuck, CFO" <fschmuck-- ATAT --lcch.org>',
+    '"Frank Schmuck, CFO" <fschmuck-- ATAT --l.example.org>',
     [
       [
         '"Frank Schmuck, CFO"',
-        'fschmuck-- ATAT --lcch.org',
+        'fschmuck-- ATAT --l.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Frank Schmuck, CFO" <fschmuck-- ATAT --lcch.org>, "\'abigail-- ATAT --foad.org\'" <abigail-- ATAT --foad.org>, Michael G Schwern <schwern-- ATAT --pobox.com>,  Nicholas Clark <nick-- ATAT --ccl4.org>, advocacy-- ATAT --perl.org',
+    '"Frank Schmuck, CFO" <fschmuck-- ATAT --l.example.org>, "\'abigail-- ATAT --foad.example.biz\'" <abigail-- ATAT --foad.example.biz>, Michael G Schwern <schwern-- ATAT --x.example.com>,  Nicholas Clark <nick-- ATAT --c.example.org>, advocacy-- ATAT --p.example.org',
     [
       [
         '"Frank Schmuck, CFO"',
-        'fschmuck-- ATAT --lcch.org',
+        'fschmuck-- ATAT --l.example.org',
         undef
       ],
       [
-        '"\'abigail-- ATAT --foad.org\'"',
-        'abigail-- ATAT --foad.org',
+        '"\'abigail-- ATAT --foad.example.biz\'"',
+        'abigail-- ATAT --foad.example.biz',
         undef
       ],
       [
         'Michael G Schwern',
-        'schwern-- ATAT --pobox.com',
+        'schwern-- ATAT --x.example.com',
         undef
       ],
       [
         'Nicholas Clark',
-        'nick-- ATAT --ccl4.org',
+        'nick-- ATAT --c.example.org',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"G. Wade Johnson" <gwadej-- ATAT --anomaly.org>',
+    '"G. Wade Johnson" <gwadej-- ATAT --normal.example.coop>',
     [
       [
         '"G. Wade Johnson"',
-        'gwadej-- ATAT --anomaly.org',
+        'gwadej-- ATAT --normal.example.coop',
         undef
       ]
     ]
   ],
   [
-    '"Gabor Szabo" <gabor-- ATAT --tracert.com>',
+    '"Gabor Szabo" <gabor-- ATAT --trt.example.biz>',
     [
       [
         '"Gabor Szabo"',
-        'gabor-- ATAT --tracert.com',
+        'gabor-- ATAT --trt.example.biz',
         undef
       ]
     ]
   ],
   [
-    '"Greg Norris (humble visionary genius)" <nextrightmove-- ATAT --yahoo.com>, <advocacy-- ATAT --perl.org>',
+    '"Greg Norris (humble visionary genius)" <nextrightmove-- ATAT --bang.example.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"Greg Norris"',
-        'nextrightmove-- ATAT --yahoo.com',
+        'nextrightmove-- ATAT --bang.example.net',
         '(humble visionary genius)'
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Greg Norris \\(humble visionary genius\\)" <nextrightmove-- ATAT --yahoo.com>',
+    '"Greg Norris \\(humble visionary genius\\)" <nextrightmove-- ATAT --bang.example.net>',
     [
       [
         '"Greg Norris \\(humble visionary genius\\)"',
-        'nextrightmove-- ATAT --yahoo.com',
+        'nextrightmove-- ATAT --bang.example.net',
         undef
       ]
     ]
   ],
   [
-    '"Greg Norris humble visionary genius\\"" <nextrightmove-- ATAT --yahoo.com>',
+    '"Greg Norris humble visionary genius\\"" <nextrightmove-- ATAT --bang.example.net>',
     [
       [
         '"Greg Norris humble visionary genius\\""',
-        'nextrightmove-- ATAT --yahoo.com',
+        'nextrightmove-- ATAT --bang.example.net',
         undef
       ]
     ]
   ],
   [
-    '"Helton, Brandon" <bhelton-- ATAT --harris.com>, perl6-language-- ATAT --perl.org, advocacy-- ATAT --perl.org',
+    '"Helton, Brandon" <bhelton-- ATAT --h.h.example.com>, perl6-language-- ATAT --p.example.org, advocacy-- ATAT --p.example.org',
     [
       [
         '"Helton, Brandon"',
-        'bhelton-- ATAT --harris.com',
+        'bhelton-- ATAT --h.h.example.com',
         undef
       ],
       [
         undef,
-        'perl6-language-- ATAT --perl.org',
+        'perl6-language-- ATAT --p.example.org',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    '"Jan Dubois" <jand-- ATAT --ActiveState.com>',
+    '"Jan Dubois" <jand-- ATAT --ExamPle.com>',
     [
       [
         '"Jan Dubois"',
-        'jand-- ATAT --ActiveState.com',
+        'jand-- ATAT --ExamPle.com',
         undef
       ]
     ]
   ],
   [
-    '"Jason W. May" <jasonmay-- ATAT --pacbell.net>',
+    '"Jason W. May" <jasonmay-- ATAT --example.name>',
     [
       [
         '"Jason W. May"',
-        'jasonmay-- ATAT --pacbell.net',
+        'jasonmay-- ATAT --example.name',
         undef
       ]
     ]
   ],
   [
-    '"Jason W. May" <jmay-- ATAT --pobox.com>',
+    '"Jason W. May" <jmay-- ATAT --x.example.com>',
     [
       [
         '"Jason W. May"',
-        'jmay-- ATAT --pobox.com',
+        'jmay-- ATAT --x.example.com',
         undef
       ]
     ]
   ],
   [
-    '"Jason W. May" <jmay-- ATAT --pobox.com>, <advocacy-- ATAT --perl.org>',
+    '"Jason W. May" <jmay-- ATAT --x.example.com>, <advocacy-- ATAT --p.example.org>',
     [
       [
         '"Jason W. May"',
-        'jmay-- ATAT --pobox.com',
+        'jmay-- ATAT --x.example.com',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [ 
-    'Jason W. May <jmay-- ATAT --pobox.com>',                                   
+    'Jason W. May <jmay-- ATAT --x.example.com>',                                   
     [                                                                           
       [                                                                         
         'Jason W. May',                                                         
-        'jmay-- ATAT --pobox.com',                                              
+        'jmay-- ATAT --x.example.com',                                              
         undef                                                                   
       ]                                                                         
     ]                                                                           
   ],                                                                            
   [
-    '"Jason W. May" <jmay-- ATAT --pobox.com>, advocacy-- ATAT --perl.org',
+    '"Jason W. May" <jmay-- ATAT --x.example.com>, advocacy-- ATAT --p.example.org',
     [
       [
         '"Jason W. May"',
-        'jmay-- ATAT --pobox.com',
+        'jmay-- ATAT --x.example.com',
         undef
       ],
       [
         undef,
-        'advocacy-- ATAT --perl.org',
+        'advocacy-- ATAT --p.example.org',
         undef
       ]
     ]
   ],
   [
-    'admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog@test.socialtext.com',
+    'admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog@test.sxt.example.info',
     [
       [
         undef,
-        'admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog-- ATAT --test.socialtext.com',
+        'admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog-- ATAT --test.sxt.example.info',
         undef,
       ],
     ],
   ]
 );
+
+my $tests = 1;
+$tests += @{ $_->[1] } * 5 for @list;
+
+plan tests => $tests;
 
 use_ok 'Email::Address';
 
@@ -1633,9 +1638,9 @@ for (@list) {
   foreach (@addrs) {
       isa_ok($_, 'Email::Address');
       my $test = shift @tests;
-      is($_->format, $test->format, "format: " .$test->format);
-      is($_->as_string, $test->format, "format: " .$test->format);
-      is("$_",       $test->format, "stringify: $_");
-      is($_->name,   $test->name,   "name: " . $test->name);
+      is($_->format,    $test->format, "format: " . $test->format);
+      is($_->as_string, $test->format, "format: " . $test->format);
+      is("$_",          $test->format, "stringify: $_");
+      is($_->name,      $test->name,   "name: " . $test->name);
   }
 }

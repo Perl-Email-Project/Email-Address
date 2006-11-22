@@ -10,4 +10,5 @@ WriteMakefile (
     'Test::More' => '0.47',
   },
   VERSION_FROM  => 'lib/Email/Address.pm',
+  clean               => { FILES => 'Time-Piece-MSSQL-* cover_db' },
 );

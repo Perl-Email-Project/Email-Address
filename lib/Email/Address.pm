@@ -9,7 +9,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.881';
+$VERSION              = '1.882';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -28,21 +28,21 @@ Email::Address - RFC 2822 Address Parsing and Creation
 
 =head1 VERSION
 
-version 1.881
+version 1.882
 
  $Id$
 
 =head1 DESCRIPTION
 
-This class implements a complete RFC 2822 parser that locates email
-addresses in strings and returns a list of C<Email::Address> objects
-found. Alternatley you may construct objects manually. The goal
-of this software is to be correct, and very very fast.
+This class implements a regex-based RFC 2822 parser that locates email
+addresses in strings and returns a list of C<Email::Address> objects found.
+Alternatley you may construct objects manually. The goal of this software is to
+be correct, and very very fast.
 
 =cut
 
-my $CTL            = q[\x00-\x1F\x7F];
-my $special        = q[()<>\\[\\]:;@\\,."];
+my $CTL            = q{\x00-\x1F\x7F};
+my $special        = q{()<>\\[\\]:;@\\,."};
 
 my $text           = qr/[^\x0A\x0D]/;
 
@@ -51,8 +51,8 @@ my $quoted_pair    = qr/\\$text/;
 my $ctext          = qr/(?>[^()\\]+)/;
 my ($ccontent, $comment) = (q{})x2;
 for (1 .. $COMMENT_NEST_LEVEL) {
-   $ccontent       = qr/$ctext|$quoted_pair|$comment/;
-   $comment        = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
+  $ccontent = qr/$ctext|$quoted_pair|$comment/;
+  $comment  = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
 }
 my $cfws           = qr/$comment|\s+/;
 
@@ -144,7 +144,7 @@ $mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
 =item parse
 
   my @addrs = Email::Address->parse(
-      q[me@local, Casey <me@local>, "Casey" <me@local> (West)]
+    q[me@local, Casey <me@local>, "Casey" <me@local> (West)]
   );
 
 This method returns a list of C<Email::Address> objects it finds
