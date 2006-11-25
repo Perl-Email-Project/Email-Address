@@ -9,7 +9,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.882';
+$VERSION              = '1.883';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -28,7 +28,7 @@ Email::Address - RFC 2822 Address Parsing and Creation
 
 =head1 VERSION
 
-version 1.882
+version 1.883
 
  $Id$
 
@@ -456,7 +456,7 @@ sub as_string {
   warn 'altering $Email::Address::STRINGIFY is deprecated; subclass instead'
     if $STRINGIFY ne 'format';
 
-  goto $_[0]->can($STRINGIFY);
+  $_[0]->can($STRINGIFY)->($_[0]);
 }
 
 use overload '""' => 'as_string';

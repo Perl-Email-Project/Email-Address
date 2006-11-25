@@ -4,7 +4,7 @@ use strict;
 use Test::More;
 
 my $have_scalar_util = 0;
-if (eval "require Scalar::Util") {
+if (eval "use Scalar::Util 1.09 (); 1") {
   $have_scalar_util = 1;
   plan tests => 8;
 } else {
