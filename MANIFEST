@@ -1,0 +1,13 @@
+bench/corpus.txt
+bench/ea-vs-ma.pl
+bench/too_long.pl
+Changes
+lib/Email/Address.pm
+Makefile.PL
+MANIFEST			This list of files
+README
+t/cache-cow.t
+t/pod.t
+t/pod-coverage.t
+t/tests.t
+LICENSE
