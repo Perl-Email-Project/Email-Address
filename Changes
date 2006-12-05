@@ -1,3 +1,7 @@
+1.884  2006-12-04
+  - fix phrase-quoting behavior by always quoting the phrase, if given
+    this fixes bug 13387; thanks, Dave Rolsky!
+
 1.883  2006-11-25
   - resolve bug 23565, as_string didn't work on 5.8.0 (weird!)
   - improve skip behavior for cache-cow.t with older Scalar::Util

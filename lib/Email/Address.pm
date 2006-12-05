@@ -9,7 +9,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.883';
+$VERSION              = '1.884';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -28,7 +28,7 @@ Email::Address - RFC 2822 Address Parsing and Creation
 
 =head1 VERSION
 
-version 1.883
+version 1.884
 
  $Id$
 
@@ -215,6 +215,7 @@ sub parse {
         next unless defined $_;
         s/^\s+//;
         s/\s+$//;
+        $_ = undef unless length $_;
       }
 
       my $new_comment = join q{ }, @comments;
@@ -379,12 +380,27 @@ object.
 sub format {
     local $^W = 0; ## no critic
     return $FORMAT_CACHE{"@{$_[0]}"} if exists $FORMAT_CACHE{"@{$_[0]}"};
+    $FORMAT_CACHE{"@{$_[0]}"} = $_[0]->_format;
+}
+
+sub _format {
     my ($self) = @_;
-    my $format = sprintf '%s <%s> %s',
-                 $self->[_PHRASE], $self->[_ADDRESS], $self->[_COMMENT];
+
+    unless (
+      defined $self->[_PHRASE] && length $self->[_PHRASE]
+      ||
+      defined $self->[_COMMENT] && length $self->[_COMMENT]
+    ) {
+        return $self->[_ADDRESS];
+    }
+
+    (my $phrase = $self->[_PHRASE]) =~ s/\"/\\"/g;
+    my $format = sprintf q{"%s" <%s> %s},
+                 $phrase, $self->[_ADDRESS], $self->[_COMMENT];
     $format =~ s/^\s+//;
     $format =~ s/\s+$//;
-    $FORMAT_CACHE{"@{$_[0]}"} = $format;
+
+    return $format;
 }
 
 =pod
