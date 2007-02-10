@@ -468,6 +468,14 @@ sub as_string {
 
 use overload '""' => 'as_string';
 
+  warn 'altering $Email::Address::STRINGIFY is deprecated; subclass instead'
+    if $STRINGIFY ne 'format';
+
+  goto &{$STRINGIFY};
+}
+
+use overload '""' => 'as_string';
+
 =pod
 
 =back
