@@ -9,7 +9,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.884';
+$VERSION              = '1.870';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -452,27 +452,18 @@ sub name {
 
   print "I have your email address, $address.";
 
-Objects stringify to C<format> by default. It's possible that you don't
-like that idea. Okay, then, you can change it by modifying
-C<$Email:Address::STRINGIFY>. Please consider modifying this package
-variable using C<local>. You might step on someone else's toes if you
-don't.
-
-  {
-    local $Email::Address::STRINGIFY = 'address';
-    print "I have your address, $address.";
-    #   geeknest.com
-  }
-  print "I have your address, $address.";
-  #   "Casey West" <casey@geeknest.com>
+Objects stringify to C<format> by default.   This is also exposed via the
+C<as_string> method.
 
 =cut
 
 sub as_string {
+  no strict 'refs';
+
   warn 'altering $Email::Address::STRINGIFY is deprecated; subclass instead'
     if $STRINGIFY ne 'format';
 
-  $_[0]->can($STRINGIFY)->($_[0]);
+  goto &{$STRINGIFY};
 }
 
 use overload '""' => 'as_string';

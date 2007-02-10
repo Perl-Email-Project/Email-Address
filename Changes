@@ -1,37 +1,7 @@
-1.884  2006-12-04
-  - fix phrase-quoting behavior by always quoting the phrase, if given
-    this fixes bug 13387; thanks, Dave Rolsky!
+1.870  2006-08-10
 
-1.883  2006-11-25
-  - resolve bug 23565, as_string didn't work on 5.8.0 (weird!)
-  - improve skip behavior for cache-cow.t with older Scalar::Util
-
-1.882  2006-11-22
-  - fix bug 21270, do not allow changes to objects to pollute the cache
-  - packaging improvements
-  - make test suite easier to manage
-  - improve honesty of documentation (we are not complete, (yet))
-
-1.881  2006-11-20
-  - Basically: fixes a case where regex never returns.
-    resolve bug 23187 by slighly diluting the solution to 22991, which is a
-    more marginal problem than that of 23187, in practical terms
-
-1.880  2006-11-11
-  - resolve bug 22991, support obs-phrase construct
-    this creates a significant slowdown, sadly, but nothing to rival bug 16320
-
-1.871  2006-10-12
-
-  - previous version had been clobberred by apparently not-in-svn 1.870
-    it said:
-      - restore as_string
-      - issue deprecation warning if $STRINGIFY is changed
-
-1.861  2006-10-12
-
-  - don't bother trying to scan or warn about undef/empty parse string
-    (thanks, JESSE)
+  - restore as_string
+  - issue deprecation warning if $STRINGIFY is changed
 
 1.86   2006-07-21
 
