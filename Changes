@@ -1,3 +1,31 @@
+
+1.884  2006-12-04
+  - fix phrase-quoting behavior by always quoting the phrase, if given
+    this fixes bug 13387; thanks, Dave Rolsky!
+
+1.883  2006-11-25
+  - resolve bug 23565, as_string didn't work on 5.8.0 (weird!)
+  - improve skip behavior for cache-cow.t with older Scalar::Util
+  - restore as_string
+  - issue deprecation warning if $STRINGIFY is changed
+
+1.882  2006-11-22
+
+  - fix bug 21270, do not allow changes to objects to pollute the cache
+  - packaging improvements
+  - make test suite easier to manage
+  - improve honesty of documentation (we are not complete, (yet))
+
+1.881  2006-11-20
+  - Basically: fixes a case where regex never returns.
+    resolve bug 23187 by slighly diluting the solution to 22991, which is a
+    more marginal problem than that of 23187, in practical terms
+
+1.880  2006-11-11
+  - resolve bug 22991, support obs-phrase construct
+    this creates a significant slowdown, sadly, but nothing to rival bug 16320
+
+1.871  2006-10-12
 1.870  2006-08-10
 
   - restore as_string
@@ -9,7 +37,7 @@
   - tweak regex for approximate 50% performance boost
     ...but bug 16320 is still true: Email::Address can be VERY slow
     https://rt.cpan.org/Ticket/Display.html?id=16320
-  
+
 
 1.85   2006-07-07
 
