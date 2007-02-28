@@ -394,13 +394,27 @@ sub _format {
         return $self->[_ADDRESS];
     }
 
-    (my $phrase = $self->[_PHRASE]) =~ s/\"/\\"/g;
-    my $format = sprintf q{"%s" <%s> %s},
-                 $phrase, $self->[_ADDRESS], $self->[_COMMENT];
+    my $format = sprintf q{%s <%s> %s},
+                 $self->_enqoted_phrase, $self->[_ADDRESS], $self->[_COMMENT];
+
     $format =~ s/^\s+//;
     $format =~ s/\s+$//;
 
     return $format;
+}
+
+sub _enquoted_phrase {
+  my ($self) = @_;
+
+  my $phrase = $self->[_PHRASE];
+
+  # if it's encoded -- rjbs, 2007-02-28
+  return $phrase if $phrase =~ /\A=\?.+\?=\z/;
+
+  $phrase =~ s/\A"(.+)"\z/$1/;
+  $phrase =~ s/\"/\\"/g;
+
+  return qq{"$phrase"};
 }
 
 =pod
