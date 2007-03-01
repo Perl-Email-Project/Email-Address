@@ -9,7 +9,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.884';
+$VERSION              = '1.885';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 
@@ -28,7 +28,7 @@ Email::Address - RFC 2822 Address Parsing and Creation
 
 =head1 VERSION
 
-version 1.884
+version 1.885
 
  $Id$
 
@@ -395,7 +395,7 @@ sub _format {
     }
 
     my $format = sprintf q{%s <%s> %s},
-                 $self->_enqoted_phrase, $self->[_ADDRESS], $self->[_COMMENT];
+                 $self->_enquoted_phrase, $self->[_ADDRESS], $self->[_COMMENT];
 
     $format =~ s/^\s+//;
     $format =~ s/\s+$//;
@@ -521,8 +521,8 @@ On his 1.8GHz Apple MacBook, rjbs gets these results:
   Email::Address 8.53/s           232%             --
 
 ...unfortunately, a known bug causes a loss of speed the string to parse has
-certain known characteristics, and disabling cache to avoid caching problems
-will also degrade performance.
+certain known characteristics, and disabling cache will also degrade
+performance.
 
 =head1 PERL EMAIL PROJECT
 
@@ -536,13 +536,19 @@ L<Email::Simple>, L<perl>.
 
 =head1 AUTHOR
 
-Casey West, <F<casey@geeknest.com>>.
+Originally by Casey West, <F<casey@geeknest.com>>.
+
+Maintained, 2006-2007, Ricardo SIGNES <F<rjbs@cpan.org>>.
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to Kevin Riggle and Tatsuhiko Miyagawa for tests for annoying phrase-quoting bugs!
 
 =head1 COPYRIGHT
 
-  Copyright (c) 2004 Casey West.  All rights reserved.  This module is free
-  software; you can redistribute it and/or modify it under the same terms as
-  Perl itself.
+Copyright (c) 2004 Casey West.  All rights reserved.  This module is free
+software; you can redistribute it and/or modify it under the same terms as Perl
+itself.
 
 =cut
 

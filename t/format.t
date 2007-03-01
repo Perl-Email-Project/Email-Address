@@ -4,7 +4,6 @@ $^W = 1;
 
 use Email::Address;
 
-
 my @tests = (
   [
     [
@@ -29,6 +28,14 @@ my @tests = (
       undef
     ],
     q{"Name With \\" Quote" <nwq@example.com>},
+  ],
+  [
+    [
+      q{"Name Surrounded With Quotes"},
+      'foobar@example.com',
+      undef
+    ],
+    q{"Name Surrounded With Quotes" <foobar@example.com>},
   ],
 );
 
