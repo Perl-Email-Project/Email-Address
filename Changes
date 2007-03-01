@@ -1,3 +1,6 @@
+1.886     2007-03-01
+          fix stupid use/require bug in test
+
 1.885     2007-02-28
           do not quote the phrase if it's MIME encoded
           do not double quote the phrase

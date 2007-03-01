@@ -12,8 +12,8 @@ plan skip_all => "Encode and Encode::MIME::Header required for these tests"
 plan tests => 2;
 
 use Email::Address;
-use Encode;
-use Encode::MIME::Header;
+Encode->import;
+Encode::MIME::Header->import;
 
 my $name = "\x{30c6}\x{30b9}\x{30c8}"; # "Test" in Unicode Japanese
 my $mime = encode("MIME-Header", $name);
