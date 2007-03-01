@@ -9,7 +9,7 @@ use Test::More;
 plan skip_all => "Encode and Encode::MIME::Header required for these tests"
   unless eval { require Encode; require Encode::MIME::Header; 1 };
 
-plan tests => 1;
+plan tests => 2;
 
 use Email::Address;
 use Encode;
