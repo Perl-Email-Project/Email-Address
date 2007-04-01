@@ -9,7 +9,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.886';
+$VERSION              = '1.887';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 

@@ -1,6 +1,5 @@
 #!perl
 use strict;
-use warnings;
 
 # This test graciously donated by Tatsuhiko Miyagawa.  All praise MIYAGAWA!
 
