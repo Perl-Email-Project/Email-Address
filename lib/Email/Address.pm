@@ -4,14 +4,16 @@ use strict;
 # support pre-5.6
 
 use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
+            $COLLAPSE_SPACES
             %PARSE_CACHE %FORMAT_CACHE %NAME_CACHE
             $addr_spec $angle_addr $name_addr $mailbox];
 
 my $NOCACHE;
 
-$VERSION              = '1.887';
+$VERSION              = '1.888';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
+$COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # who wants //=? me!
 
 =head1 NAME
 
@@ -42,7 +44,7 @@ be correct, and very very fast.
 =cut
 
 my $CTL            = q{\x00-\x1F\x7F};
-my $special        = q{()<>\\[\\]:;@\\,."};
+my $special        = q{()<>\\[\\]:;@\\\\,."};
 
 my $text           = qr/[^\x0A\x0D]/;
 
@@ -167,6 +169,12 @@ more.
 
 The reason for this hardly limiting limitation is simple: efficiency.
 
+Long strings of whitespace can be problematic for this module to parse, a bug
+which has not yet been adequately addressed.  The default behavior is now to
+collapse multiple spaces into a single space, which avoids this problem.  To
+prevent this behavior, set C<$Email::Address::COLLAPSE_SPACES> to zero.  This
+variable will go away when the bug is resolved properly.
+
 =cut
 
 sub __get_cached_parse {
@@ -189,6 +197,8 @@ sub __cache_parse {
 sub parse {
     my ($class, $line) = @_;
     return unless $line;
+
+    $line =~ s/[ \t]+/ /g if $COLLAPSE_SPACES;
 
     if (my @cached = $class->__get_cached_parse($line)) {
         return @cached;

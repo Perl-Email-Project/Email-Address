@@ -1,3 +1,7 @@
+1.888     2007-04-01
+          rt 16320 - collapse multiple whitespaces to prevent speed problem
+          rt 24161 - forbid backslash in dot-atom
+
 1.887     2007-04-01
           fix a test to prevent failure on 5.005
 
