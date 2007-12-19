@@ -10,7 +10,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.888';
+$VERSION              = '1.889';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # who wants //=? me!
@@ -253,7 +253,12 @@ The original string should only really be set using C<parse>.
 
 =cut
 
-sub new { bless [@_[1..4]], $_[0] }
+sub new {
+  my ($class, $phrase, $email, $comment, $orig) = @_;
+  $phrase =~ s/\A"(.+)"\z/$1/ if $phrase;
+
+  bless [ $phrase, $email, $comment, $orig ] => $class;
+}
 
 =pod
 

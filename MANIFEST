@@ -11,5 +11,6 @@ t/format.t
 t/pod.t
 t/pod-coverage.t
 t/quote-encoded.t
+t/quoting.t
 t/tests.t
 LICENSE

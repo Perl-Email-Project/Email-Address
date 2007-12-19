@@ -1,3 +1,9 @@
+Release history for Email-Address
+
+1.889     2007-12-19
+          even if the phrase needed quoting, do not return quoted phrase from
+          the phrase method
+
 1.888     2007-04-01
           rt 16320 - collapse multiple whitespaces to prevent speed problem
           rt 24161 - forbid backslash in dot-atom
