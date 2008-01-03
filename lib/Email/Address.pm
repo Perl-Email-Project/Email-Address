@@ -215,9 +215,12 @@ sub parse {
         return @cached;
     }
 
-    my (@mailboxes) = $line =~ /($mailbox)/g;
+    $line =~ /\A($mailbox)/go;
+    my @mailboxes = $1;
+    push @mailboxes, $line =~ /\G,\s*($mailbox)/go;
+
     my @addrs;
-    foreach (@mailboxes) {
+    MBOX: foreach (grep { defined } @mailboxes) {
       # Strip comments.  Email address comments are the bane of every email
       # address handler's day. -- rjbs, 2008-01-02
       my @comments = /($comment)/go;
@@ -225,11 +228,11 @@ sub parse {
 
       my ($phrase, $local_part, $domain);
 
-      if (/\A$addr_spec_CRE\z/) {
+      if (/\A$addr_spec_CRE\z/o) {
         $phrase     = '';
         $local_part = $1;
         $domain     = $2;
-      } elsif (/\A$name_addr_CRE\z/) {
+      } elsif (/\A$name_addr_CRE\z/o) {
         $phrase     = defined $1 ? $1 : '';
         $local_part = $2;
         $domain     = $3;
@@ -237,13 +240,13 @@ sub parse {
         die "can't decypher $_";
       }
 
-      $phrase     =~ s/$lead_tail_cfws//g;
-      $local_part =~ s/$lead_tail_cfws//g;
+      $phrase     =~ s/$lead_tail_cfws//go;
+      $local_part =~ s/$lead_tail_cfws//go;
 
       my $original = $_;
 
       my $all_comments = join q{ }, @comments;
-      $all_comments =~ s/(?:\A\s+|\s+\z)//g;
+      $all_comments =~ s/(?:\A\s+|\s+\z)//go;
 
       push @addrs, $class->new(
         $phrase,

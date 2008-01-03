@@ -1622,18 +1622,23 @@ my @list = (
 );
 
 my $tests = 1;
-$tests += @{ $_->[1] } * 5 for @list;
+   $tests += 1 + @{ $_->[1] } * 5 for @list;
 
 plan tests => $tests;
 
 use_ok 'Email::Address';
 
 for (@list) {
-  $_->[0] =~ s/-- ATAT --/@/g;
-  my @addrs = Email::Address->parse($_->[0]);
-  my @tests =
-    map { Email::Address->new(map { $_ ? do {s/-- ATAT --/@/g; $_} : $_ } @$_) }
-    @{$_->[1]};
+  my ($string, $expect) = @$_;
+
+  $string =~ s/-- ATAT --/@/g;
+  my @addrs = Email::Address->parse($string);
+
+  is(@addrs, @$expect, "got correct number of results from {$string}");
+
+  my @tests = map {
+    Email::Address->new(map { s/-- ATAT --/@/g if $_; $_ } @$_) }
+    @$expect;
 
   foreach (@addrs) {
       isa_ok($_, 'Email::Address');
