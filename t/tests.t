@@ -678,7 +678,7 @@ my @list = (
     '"<advocacy-- ATAT --p.example.org>" <advocacy-- ATAT --p.example.org>',
     [
       [
-        'advocacy',
+        '<advocacy-- ATAT --p.example.org>',
         'advocacy-- ATAT --p.example.org',
         undef
       ]

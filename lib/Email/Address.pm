@@ -1,19 +1,18 @@
 package Email::Address;
 use strict;
-## no critic RequireUseWarnings
-# support pre-5.6
+#use warnings;
 
-use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
-            $COLLAPSE_SPACES
-            %PARSE_CACHE %FORMAT_CACHE %NAME_CACHE
-            $addr_spec $angle_addr $name_addr $mailbox];
+use Data::Dumper; #XXX
 
 my $NOCACHE;
+my %PARSE_CACHE;
+my %FORMAT_CACHE;
+my %NAME_CACHE;
 
-$VERSION              = '1.889';
-$COMMENT_NEST_LEVEL ||= 2;
-$STRINGIFY          ||= 'format';
-$COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # who wants //=? me!
+our $VERSION              = '1.889';
+our $COMMENT_NEST_LEVEL ||= 2;
+our $STRINGIFY          ||= 'format';
+our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # who wants //=? me!
 
 =head1 NAME
 
@@ -73,16 +72,18 @@ my $word           = qr/$atom|$quoted_string/;
 # to resolve bug 22991, creating a significant slowdown.  Given current speed
 # problems.  Once 16320 is resolved, this section should be dealt with.
 # -- rjbs, 2006-11-11
-#my $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
-
-# XXX: ...and the above solution caused endless problems (never returned) when
+#
+# XXX: ...and the first solution caused endless problems (never returned) when
 # examining this address, now in a test:
 #   admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog-- ATAT --test.socialtext.com
 # So we disallow the hateful CFWS in this context for now.  Of modern mail
 # agents, only Apple Web Mail 2.0 is known to produce obs-phrase.
 # -- rjbs, 2006-11-19
+my $obs_phrase;
+   $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
+
 my $simple_word    = qr/$atom|\.|\s*"$qcontent+"\s*/;
-my $obs_phrase     = qr/$simple_word+/;
+   $obs_phrase     = qr/$simple_word+/;
 
 my $phrase         = qr/$obs_phrase|(?:$word+)/;
 
@@ -134,10 +135,19 @@ following comment.
 
 =cut
 
-$addr_spec  = qr/$local_part\@$domain/;
-$angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
-$name_addr  = qr/$display_name?$angle_addr/;
-$mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
+our $addr_spec  = qr/$local_part\@$domain/;
+our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
+our $name_addr  = qr/$display_name?$angle_addr/;
+our $mailbox    = qr/(?:$name_addr|$addr_spec)/;
+
+our $addr_spec_CRE  = qr/($local_part)\@($domain)/;
+our $angle_addr_CRE = qr/$cfws*<$addr_spec_CRE>$cfws*/;
+our $name_addr_CRE  = qr/($display_name)?$angle_addr_CRE/;
+
+our $mailbox_list = qr/($mailbox)(?:,($mailbox))*/;
+our $group        = qr/$display_name\:/;
+our $address      = qr/$mailbox|$group/;
+our $address_list = qr/($address)(?:,($address))*/;
 
 sub _PHRASE   () { 0 }
 sub _ADDRESS  () { 1 }
@@ -194,6 +204,7 @@ sub __cache_parse {
     $PARSE_CACHE{$line} = $addrs;
 }
 
+my $lead_tail_cfws = qr/(?:\A$cfws|$cfws\z)/;
 sub parse {
     my ($class, $line) = @_;
     return unless $line;
@@ -204,33 +215,43 @@ sub parse {
         return @cached;
     }
 
-    my (@mailboxes) = ($line =~ /$mailbox/go);
+    my (@mailboxes) = $line =~ /($mailbox)/g;
     my @addrs;
     foreach (@mailboxes) {
-      my $original = $_;
-
+      # Strip comments.  Email address comments are the bane of every email
+      # address handler's day. -- rjbs, 2008-01-02
       my @comments = /($comment)/go;
       s/$comment//go if @comments;
 
-      my ($user, $host, $com);
-      ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>//o;
-      if (! defined($user) || ! defined($host)) {
-          s/($local_part)\@($domain)//o;
-          ($user, $host) = ($1, $2);
+      my ($phrase, $local_part, $domain);
+
+      if (/\A$addr_spec_CRE\z/) {
+        $phrase     = '';
+        $local_part = $1;
+        $domain     = $2;
+      } elsif (/\A$name_addr_CRE\z/) {
+        $phrase     = defined $1 ? $1 : '';
+        $local_part = $2;
+        $domain     = $3;
+      } else {
+        die "can't decypher $_";
       }
 
-      my ($phrase)       = /($display_name)/o;
+      $phrase     =~ s/$lead_tail_cfws//g;
+      $local_part =~ s/$lead_tail_cfws//g;
 
-      for ( $phrase, $host, $user, @comments ) {
-        next unless defined $_;
-        s/^\s+//;
-        s/\s+$//;
-        $_ = undef unless length $_;
-      }
+      my $original = $_;
 
-      my $new_comment = join q{ }, @comments;
-      push @addrs,
-        $class->new($phrase, "$user\@$host", $new_comment, $original);
+      my $all_comments = join q{ }, @comments;
+      $all_comments =~ s/(?:\A\s+|\s+\z)//g;
+
+      push @addrs, $class->new(
+        $phrase,
+        "$local_part\@$domain",
+        $all_comments,
+        $original,
+      );
+
       $addrs[-1]->[_IN_CACHE] = [ \$line, $#addrs ]
     }
 
