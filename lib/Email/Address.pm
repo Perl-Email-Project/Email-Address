@@ -37,7 +37,7 @@ version 1.886
 
 This class implements a regex-based RFC 2822 parser that locates email
 addresses in strings and returns a list of C<Email::Address> objects found.
-Alternatley you may construct objects manually. The goal of this software is to
+Alternately you may construct objects manually. The goal of this software is to
 be correct, and very very fast.
 
 =cut
