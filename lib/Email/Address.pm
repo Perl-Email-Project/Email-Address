@@ -135,12 +135,12 @@ following comment.
 
 =cut
 
-our $addr_spec  = qr/$local_part\@$domain/;
+our $addr_spec  = qr/(?:$local_part\@$domain|$local_part)/;
 our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
 our $name_addr  = qr/$display_name?$angle_addr/;
 our $mailbox    = qr/(?:$name_addr|$addr_spec)/;
 
-our $addr_spec_CRE  = qr/($local_part)\@($domain)/;
+our $addr_spec_CRE  = qr/(?|($local_part)\@($domain)|($local_part)())/;
 our $angle_addr_CRE = qr/$cfws*<$addr_spec_CRE>$cfws*/;
 our $name_addr_CRE  = qr/($display_name)?$angle_addr_CRE/;
 
@@ -185,6 +185,18 @@ collapse multiple spaces into a single space, which avoids this problem.  To
 prevent this behavior, set C<$Email::Address::COLLAPSE_SPACES> to zero.  This
 variable will go away when the bug is resolved properly.
 
+=item parse_allow_domainless
+
+  my @addrs = Email::Address->parse_allow_domainless(
+    q[me, Casey <me>, "Casey" <me> (West)]
+  );
+
+This method returns a list of C<Email::Address> objects it finds in
+the input string; it differs from :</parse> in that it allows
+"domainless" addresses, which lack an at-sign and domain name.  The
+domain of the addresses is presumed to be assumable by the calling
+code.
+
 =cut
 
 sub __get_cached_parse {
@@ -205,13 +217,15 @@ sub __cache_parse {
 }
 
 my $lead_tail_cfws = qr/(?:\A$cfws|$cfws\z)/;
-sub parse {
-    my ($class, $line) = @_;
+
+sub __parse {
+    my ($class, $line, $domainless) = @_;
     return unless $line;
 
     $line =~ s/[ \t]+/ /g if $COLLAPSE_SPACES;
 
-    if (my @cached = $class->__get_cached_parse($line)) {
+    my $key = "$domainless,$line";
+    if (my @cached = $class->__get_cached_parse($key)) {
         return @cached;
     }
 
@@ -239,6 +253,7 @@ sub parse {
       } else {
         die "can't decypher $_";
       }
+      last unless $domain or $domainless;
 
       $phrase     =~ s/$lead_tail_cfws//go;
       $local_part =~ s/$lead_tail_cfws//go;
@@ -250,16 +265,28 @@ sub parse {
 
       push @addrs, $class->new(
         $phrase,
-        "$local_part\@$domain",
+        $domain ? "$local_part\@$domain" : $local_part,
         $all_comments,
         $original,
       );
 
-      $addrs[-1]->[_IN_CACHE] = [ \$line, $#addrs ]
+      $addrs[-1]->[_IN_CACHE] = [ \$key, $#addrs ]
     }
 
-    $class->__cache_parse($line, \@addrs);
+    $class->__cache_parse($key, \@addrs);
     return @addrs;
+}
+
+sub parse {
+    my $self = shift;
+    my ($line) = @_;
+    return $self->__parse($line, 0);
+}
+
+sub parse_allow_domainless {
+    my $self = shift;
+    my ($line) = @_;
+    return $self->__parse($line, 1);
 }
 
 =pod
@@ -488,7 +515,7 @@ sub name {
         $name =~ s/($quoted_pair)/substr $1, -1/goe;
         $name =~ s/$comment/ /go;
     } else {
-        ($name) = $self->[_ADDRESS] =~ /($local_part)\@/o;
+        ($name) = $self->[_ADDRESS] =~ /($local_part)(?:\@|\Z)/o;
     }
     $NAME_CACHE{"@{$_[0]}"} = $name;
 }

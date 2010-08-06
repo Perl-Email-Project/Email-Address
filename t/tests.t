@@ -1618,34 +1618,103 @@ my @list = (
         undef,
       ],
     ],
-  ]
+  ],
+);
+
+my @domain_list = (@list,
+  [
+    'jibsheet',
+    [],
+  ],
+  [
+    'alexmv@example.com, jibsheet, jesse@example.com',
+    [
+      [
+        undef,
+        'alexmv-- ATAT --example.com',
+        undef,
+      ],
+    ],
+  ],
+);
+
+my @domainless_list = (@list,
+  [
+    'falcone',
+    [
+      [
+        undef,
+        'falcone',
+        undef
+      ],
+    ]
+  ],
+  [
+    'falcone, alexmv',
+    [
+      [
+        undef,
+        'falcone',
+        undef
+      ],
+      [
+        undef,
+        'alexmv',
+        undef
+      ],
+    ]
+  ],
+  [
+    'alexmv@example.com, jibsheet, jesse@example.com',
+    [
+      [
+        undef,
+        'alexmv-- ATAT --example.com',
+        undef,
+      ],
+      [
+        undef,
+        'jibsheet',
+        undef,
+      ],
+      [
+        undef,
+        'jesse-- ATAT --example.com',
+        undef,
+      ],
+    ],
+  ],
 );
 
 my $tests = 1;
-   $tests += 1 + @{ $_->[1] } * 5 for @list;
+   $tests += 1 + @{ $_->[1] } * 5 for @domain_list;
+   $tests += 1 + @{ $_->[1] } * 5 for @domainless_list;
 
 plan tests => $tests;
 
 use_ok 'Email::Address';
 
-for (@list) {
-  my ($string, $expect) = @$_;
+for ([parse => \@domain_list], [parse_allow_domainless => \@domainless_list]) {
+    my ($method,$list) = @$_;
+    for (@$list) {
+        my ($string, $expect) = @$_;
 
-  $string =~ s/-- ATAT --/@/g;
-  my @addrs = Email::Address->parse($string);
+        $string =~ s/-- ATAT --/@/g;
+        my @addrs = Email::Address->$method($string);
 
-  is(@addrs, @$expect, "got correct number of results from {$string}");
+        is(@addrs, @$expect, "got correct number of results from $method {$string}");
 
-  my @tests = map {
-    Email::Address->new(map { s/-- ATAT --/@/g if $_; $_ } @$_) }
-    @$expect;
+        my @tests = map {
+            Email::Address->new(map { s/-- ATAT --/@/g if $_; $_ } @$_) }
+        @$expect;
 
-  foreach (@addrs) {
-      isa_ok($_, 'Email::Address');
-      my $test = shift @tests;
-      is($_->format,    $test->format, "format: " . $test->format);
-      is($_->as_string, $test->format, "format: " . $test->format);
-      is("$_",          $test->format, "stringify: $_");
-      is($_->name,      $test->name,   "name: " . $test->name);
-  }
+        foreach (@addrs) {
+            isa_ok($_, 'Email::Address');
+            my $test = shift @tests;
+            is($_->format,    $test->format, "format: " . $test->format);
+            is($_->as_string, $test->format, "format: " . $test->format);
+            is("$_",          $test->format, "stringify: $_");
+            is($_->name,      $test->name,   "name: " . $test->name);
+        }
+    }
 }
