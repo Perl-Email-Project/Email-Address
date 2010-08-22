@@ -1,5 +1,8 @@
 Release history for Email-Address
 
+1.890     2010-08-22
+          allow domainless addresses (if requested) (thanks, Alex Vandiver)
+
 1.889     2007-12-19
           even if the phrase needed quoting, do not return quoted phrase from
           the phrase method
