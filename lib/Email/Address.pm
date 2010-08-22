@@ -2,8 +2,6 @@ package Email::Address;
 use strict;
 #use warnings;
 
-use Data::Dumper; #XXX
-
 my $NOCACHE;
 my %PARSE_CACHE;
 my %FORMAT_CACHE;
@@ -30,8 +28,6 @@ Email::Address - RFC 2822 Address Parsing and Creation
 =head1 VERSION
 
 version 1.886
-
- $Id$
 
 =head1 DESCRIPTION
 
