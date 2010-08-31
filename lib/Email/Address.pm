@@ -7,7 +7,7 @@ my %PARSE_CACHE;
 my %FORMAT_CACHE;
 my %NAME_CACHE;
 
-our $VERSION              = '1.890';
+our $VERSION              = '1.891';
 our $COMMENT_NEST_LEVEL ||= 2;
 our $STRINGIFY          ||= 'format';
 our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # who wants //=? me!
@@ -27,7 +27,7 @@ Email::Address - RFC 2822 Address Parsing and Creation
 
 =head1 VERSION
 
-version 1.890
+version 1.891
 
 =head1 DESCRIPTION
 

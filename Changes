@@ -1,5 +1,8 @@
 Release history for Email-Address
 
+1.891     2010-08-30
+          rework domainless address feature to work on perl5.8 (Alex Vandiver)
+
 1.890     2010-08-22
           allow domainless addresses (if requested) (thanks, Alex Vandiver)
 
