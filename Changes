@@ -1,5 +1,14 @@
 Release history for Email-Address
 
+1.892     2010-09-02
+          revert all behavior to 1.889
+
+1.891     2010-08-30
+          rework domainless address feature to work on perl5.8 (Alex Vandiver)
+
+1.890     2010-08-22
+          allow domainless addresses (if requested) (thanks, Alex Vandiver)
+
 1.889     2007-12-19
           even if the phrase needed quoting, do not return quoted phrase from
           the phrase method
