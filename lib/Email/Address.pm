@@ -120,12 +120,12 @@ brackets.
 =item $Email::Address::name_addr
 
 This regular expression defines what an email address can look like
-with an optional preceeding display name, also known as the C<phrase>.
+with an optional preceding display name, also known as the C<phrase>.
 
 =item $Email::Address::mailbox
 
 This is the complete regular expression defining an RFC 2822 emial
-address with an optional preceeding display name and optional
+address with an optional preceding display name and optional
 following comment.
 
 =back
@@ -285,7 +285,9 @@ sub purge_cache {
 
   Email::Address->disable_cache if memory_low();
 
-If you'd rather not cache address parses at all, you can disable (and reenable) the Email::Address cache with these methods.  The cache is enabled by default.
+If you'd rather not cache address parses at all, you can disable (and
+re-enable) the Email::Address cache with these methods.  The cache is enabled
+by default.
 
 =cut
 
