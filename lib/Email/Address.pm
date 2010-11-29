@@ -132,6 +132,11 @@ our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
 our $name_addr  = qr/$display_name?$angle_addr/;
 our $mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
 
+our $addr_spec_domainless  = qr/$local_part(?:\@$domain)?/;
+our $angle_addr_domainless = qr/$cfws*<$addr_spec_domainless>$cfws*/;
+our $name_addr_domainless  = qr/$display_name?$angle_addr_domainless/;
+our $mailbox_domainless    = qr/(?:$name_addr_domainless|$addr_spec_domainless)$comment*/;
+
 sub _PHRASE   () { 0 }
 sub _ADDRESS  () { 1 }
 sub _COMMENT  () { 2 }
@@ -171,6 +176,17 @@ In accordance with RFC 822 and its descendants, this module demands that email
 addresses be ASCII only.  Any non-ASCII content in the parsed addresses will
 cause the parser to return no results.
 
+=item parse_allow_domainless
+
+  my @addrs = Email::Address->parse_allow_domainless(
+    q[me, Casey <me>, "Casey" <me> (West)]
+  );
+
+This method returns a list of C<Email::Address> objects it finds in the
+input string; it differs from L</parse> in that it allows "domainless"
+addresses, which lack an at-sign and domain name.  The domain of the
+addresses is presumed to be assumable by the calling code.
+
 =cut
 
 our (%PARSE_CACHE, %FORMAT_CACHE, %NAME_CACHE);
@@ -193,17 +209,19 @@ sub __cache_parse {
     $PARSE_CACHE{$line} = $addrs;
 }
 
-sub parse {
-    my ($class, $line) = @_;
+sub __parse {
+    my ($class, $line, $domainless) = @_;
     return unless $line;
 
     $line =~ s/[ \t]+/ /g if $COLLAPSE_SPACES;
 
-    if (my @cached = $class->__get_cached_parse($line)) {
+    my $key = "$domainless,$line";
+    if (my @cached = $class->__get_cached_parse($key)) {
         return @cached;
     }
 
-    my (@mailboxes) = ($line =~ /$mailbox/go);
+    my (@mailboxes) = $domainless ? ($line =~ /$mailbox_domainless/go)
+                                  : ($line =~ /$mailbox/go);
     my @addrs;
     foreach (@mailboxes) {
       my $original = $_;
@@ -212,14 +230,15 @@ sub parse {
       s/$comment//go if @comments;
 
       my ($user, $host, $com);
-      ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>//o;
-      if (! defined($user) || ! defined($host)) {
-          s/($local_part)\@($domain)//o;
+      ($user, $host) = ($1, $2) if s/<($local_part)(?:\@($domain))?>//o;
+      if (not defined($user) or (not defined($host) and $domainless)) {
+          s/($local_part)(?:\@($domain))?//o;
           ($user, $host) = ($1, $2);
       }
+      next unless $host or $domainless;
 
       next if $user =~ /\P{ASCII}/;
-      next if $host =~ /\P{ASCII}/;
+      next if defined $host and $host =~ /\P{ASCII}/;
 
       my ($phrase)       = /($display_name)/o;
 
@@ -232,12 +251,24 @@ sub parse {
 
       my $new_comment = join q{ }, @comments;
       push @addrs,
-        $class->new($phrase, "$user\@$host", $new_comment, $original);
-      $addrs[-1]->[_IN_CACHE] = [ \$line, $#addrs ]
+        $class->new($phrase, $host ? "$user\@$host" : $user, $new_comment, $original);
+      $addrs[-1]->[_IN_CACHE] = [ \$key, $#addrs ]
     }
 
-    $class->__cache_parse($line, \@addrs);
+    $class->__cache_parse($key, \@addrs);
     return @addrs;
+}
+
+sub parse {
+    my $self = shift;
+    my ($line) = @_;
+    return $self->__parse($line, 0);
+}
+
+sub parse_allow_domainless {
+    my $self = shift;
+    my ($line) = @_;
+    return $self->__parse($line, 1);
 }
 
 =item new
@@ -465,7 +496,7 @@ sub name {
         $name =~ s/($quoted_pair)/substr $1, -1/goe;
         $name =~ s/$comment/ /go;
     } else {
-        ($name) = $self->[_ADDRESS] =~ /($local_part)\@/o;
+        ($name) = $self->[_ADDRESS] =~ /($local_part)(?:\@|\Z)/o;
     }
     $NAME_CACHE{$cache_str} = $name;
 }

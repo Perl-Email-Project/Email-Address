@@ -42,6 +42,9 @@ my %tests = (
         [ 'foo bar@bar.com',            0 ],
         [ '<foo bar>@bar.com',          0 ],
     ],
+    mailbox_domainless => [
+        [ 'foo',                        1 ],
+    ],
 );
 
 my $num_tests = scalar( map @{$_}, values %tests );
@@ -54,7 +57,7 @@ my %pats = map {
     my $pat;
     eval '$pat = $Email::Address::'.$_;
     ($_ => $pat);
-} qw( addr_spec angle_addr name_addr mailbox );
+} qw( addr_spec angle_addr name_addr mailbox mailbox_domainless);
 
 for my $pattern_name (keys %tests) {
     for my $test (@{ $tests{$pattern_name} }) {
