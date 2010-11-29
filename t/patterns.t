@@ -39,7 +39,6 @@ my %tests = (
         [ '"Richard Sonnen" <sonnen@frii.com>',             1 ],
         [ '"Richard Sonnen" <sonnen@frii.com> (comments)',  1 ],
         [ '',                           0 ],
-        [ 'foo',                        0 ],
         [ 'foo bar@bar.com',            0 ],
         [ '<foo bar>@bar.com',          0 ],
     ],
