@@ -173,6 +173,10 @@ collapse multiple spaces into a single space, which avoids this problem.  To
 prevent this behavior, set C<$Email::Address::COLLAPSE_SPACES> to zero.  This
 variable will go away when the bug is resolved properly.
 
+Please note that this module expects C<B<ASCII>> strings to parse, in
+accordance with RFC 822 and its descendants.  Any non-ASCII input at all will
+cause the parser to return no results.
+
 =cut
 
 sub __get_cached_parse {
@@ -195,6 +199,8 @@ sub __cache_parse {
 sub parse {
     my ($class, $line) = @_;
     return unless $line;
+
+    return if $line =~ /\P{ASCII}/;
 
     $line =~ s/[ \t]+/ /g if $COLLAPSE_SPACES;
 
