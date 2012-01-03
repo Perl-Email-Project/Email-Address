@@ -165,7 +165,7 @@ more.
 
   $Email::Address::COMMENT_NEST_LEVEL = 10; # I'm deep
 
-The reason for this hardly limiting limitation is simple: efficiency.
+The reason for this hardly-limiting limitation is simple: efficiency.
 
 Long strings of whitespace can be problematic for this module to parse, a bug
 which has not yet been adequately addressed.  The default behavior is now to
@@ -181,12 +181,12 @@ sub __get_cached_parse {
     my ($class, $line) = @_;
 
     return @{$PARSE_CACHE{$line}} if exists $PARSE_CACHE{$line};
-    return; 
+    return;
 }
 
 sub __cache_parse {
     return if $NOCACHE;
-    
+
     my ($class, $line, $addrs) = @_;
 
     $PARSE_CACHE{$line} = $addrs;
@@ -366,7 +366,7 @@ BEGIN {
       if ($_[1]) {
         if ($_[0][_IN_CACHE]) {
           my $replicant = bless [ @{$_[0]} ] => ref $_[0];
-          $PARSE_CACHE{ ${ $_[0][_IN_CACHE][0] } }[ $_[0][_IN_CACHE][1] ] 
+          $PARSE_CACHE{ ${ $_[0][_IN_CACHE][0] } }[ $_[0][_IN_CACHE][1] ]
             = $replicant;
           $_[0][_IN_CACHE] = undef;
         }
@@ -520,7 +520,7 @@ __END__
 
 On his 1.8GHz Apple MacBook, rjbs gets these results:
 
-  $ perl -Ilib bench/ea-vs-ma.pl bench/corpus.txt 5 
+  $ perl -Ilib bench/ea-vs-ma.pl bench/corpus.txt 5
                    Rate  Mail::Address Email::Address
   Mail::Address  2.59/s             --           -44%
   Email::Address 4.59/s            77%             --
