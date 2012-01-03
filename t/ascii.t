@@ -24,3 +24,5 @@ my $text  = decode('utf-8', $utf_8, Encode::LEAVE_SRC);
   my (@addr) = Email::Address->parse($text);
   is(@addr, 0, "unicode (decoded) address: not ok");
 }
+
+done_testing;
