@@ -1,5 +1,8 @@
 Release history for Email-Address
 
+1.893     2012-01-02
+          reject any non-ascii content in strings
+
 1.892     2010-09-02
           revert all behavior to 1.889
 
