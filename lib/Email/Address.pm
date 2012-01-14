@@ -94,6 +94,13 @@ my $display_name   = $phrase;
 
 =head2 Package Variables
 
+B<ACHTUNG!>  Email isn't easy (if even possible) to parse with a regex, I<at
+least> if you're on a C<perl> prior to 5.10.0.  Providing regular expressions
+for use by other programs isn't a great idea, because it makes it hard to
+improve the parser without breaking the "it's a regex" feature.  Using these
+regular expressions is not encouraged, and methods like C<<
+Email::Address->is_addr_spec >> should be provided in the future.
+
 Several regular expressions used in this package are useful to others.
 For convenience, these variables are declared as package variables that
 you may access from your program.
