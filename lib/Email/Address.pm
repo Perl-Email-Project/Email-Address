@@ -207,8 +207,6 @@ sub parse {
     my ($class, $line) = @_;
     return unless $line;
 
-    return if $line =~ /\P{ASCII}/;
-
     $line =~ s/[ \t]+/ /g if $COLLAPSE_SPACES;
 
     if (my @cached = $class->__get_cached_parse($line)) {
@@ -229,6 +227,9 @@ sub parse {
           s/($local_part)\@($domain)//o;
           ($user, $host) = ($1, $2);
       }
+
+      return if $user =~ /\P{ASCII}/;
+      return if $host =~ /\P{ASCII}/;
 
       my ($phrase)       = /($display_name)/o;
 
