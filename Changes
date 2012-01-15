@@ -1,5 +1,8 @@
 Release history for Email-Address
 
+1.895     2012-01-15
+          allow non-ASCII *only in phrase*
+
 1.894     2012-01-14
           note that the use of the regex vars is not a great idea
 

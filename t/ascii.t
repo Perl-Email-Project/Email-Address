@@ -10,11 +10,24 @@ my $ascii = q{admin@mozilla.org};
 my $utf_8 = q{аdmin@mozilla.org};
 my $text  = decode('utf-8', $utf_8, Encode::LEAVE_SRC);
 
+my $ok_mixed  = qq{"$text" <$ascii>};
+my $bad_mixed = qq{"$text" <$text>};
+
 {
   my (@addr) = Email::Address->parse($ascii);
   is(@addr, 1, "an ascii address is a-ok");
 
   # ok( $ascii =~ $Email::Address::addr_spec, "...it =~ addr_spec");
+}
+
+{
+  my (@addr) = Email::Address->parse($ok_mixed);
+  is(@addr, 1, "a quoted non-ascii phrase is a-ok with ascii email");
+}
+
+{
+  my (@addr) = Email::Address->parse($bad_mixed);
+  is(@addr, 0, "a quoted non-ascii phrase is not okay with non-ascii email");
 }
 
 {
