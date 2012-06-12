@@ -36,8 +36,8 @@ version 1.895
 
 This class implements a regex-based RFC 2822 parser that locates email
 addresses in strings and returns a list of C<Email::Address> objects found.
-Alternatley you may construct objects manually. The goal of this software is to
-be correct, and very very fast.
+Alternatively you may construct objects manually. The goal of this software is
+to be correct, and very very fast.
 
 =cut
 
@@ -280,7 +280,7 @@ sub new {
 
 One way this module stays fast is with internal caches. Caches live
 in memory and there is the remote possibility that you will have a
-memory problem. In the off chance that you think you're one of those
+memory problem. On the off chance that you think you're one of those
 people, this class method will empty those caches.
 
 I've loaded over 12000 objects and not encountered a memory problem.
@@ -502,12 +502,15 @@ variable using C<local>. You might step on someone else's toes if you
 don't.
 
   {
-    local $Email::Address::STRINGIFY = 'address';
+    local $Email::Address::STRINGIFY = 'host';
     print "I have your address, $address.";
     #   geeknest.com
   }
   print "I have your address, $address.";
   #   "Casey West" <casey@geeknest.com>
+
+Modifying this package variable is now deprecated. Subclassing is now the
+recommended approach.
 
 =cut
 
