@@ -1,5 +1,8 @@
 Release history for Email-Address
 
+1.896     2012-07-31
+          documentation improvements (thanks, Glenn Fowler!)
+
 1.895     2012-01-15
           allow non-ASCII *only in phrase*
 

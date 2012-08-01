@@ -1,5 +1,5 @@
 NAME
-    Email::Address 1.895 - RFC 2822 Address Parsing and Creation
+    Email::Address 1.896 - RFC 2822 Address Parsing and Creation
 
 SYNOPSIS
       use Email::Address;
