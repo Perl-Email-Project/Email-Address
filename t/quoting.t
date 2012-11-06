@@ -2,7 +2,7 @@
 use strict;
 
 use Email::Address;
-use Test::More tests => 6;
+use Test::More tests => 8;
 
 my $phrase = q{jack!work};
 my $email  = 'jack@work.com';
@@ -36,3 +36,9 @@ is(
 );
 
 is($ea3->phrase, $phrase, "the phrase method returns the right thing");
+
+{
+    my $ea = Email::Address->new(q{jack "\\" robinson}, 'jack@work.com');
+    is $ea->phrase, q{jack "\\" robinson};
+    is $ea->format, q{"jack \\"\\\\\\" robinson" <jack@work.com>};
+}
