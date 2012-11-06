@@ -144,6 +144,12 @@ $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
 $name_addr  = qr/$display_name?$angle_addr/;
 $mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
 
+my $capturing_mailbox = qr/
+    (?:($display_name)?($cfws*)<($addr_spec)>($cfws*)
+        |($addr_spec)
+    )($comment*)
+/x;
+
 sub _PHRASE   () { 0 }
 sub _ADDRESS  () { 1 }
 sub _COMMENT  () { 2 }
@@ -213,36 +219,31 @@ sub parse {
         return @cached;
     }
 
-    my (@mailboxes) = ($line =~ /$mailbox/go);
+    my (@mailboxes) = ($line =~ /($capturing_mailbox)/go);
     my @addrs;
-    foreach (@mailboxes) {
-      my $original = $_;
+    while (my @list = splice @mailboxes, 0, 7) {
+      my ($original, $phrase, $address, @comments)
+        = ($list[0], $list[1], $list[3]||$list[5], @list[2,4,6]);
 
-      my @comments = /($comment)/go;
-      s/$comment//go if @comments;
+      return if $address =~ /\P{ASCII}/;
 
-      my ($user, $host, $com);
-      ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>//o;
-      if (! defined($user) || ! defined($host)) {
-          s/($local_part)\@($domain)//o;
-          ($user, $host) = ($1, $2);
+      if ( defined $phrase ) {
+        # for backwards compatibility
+        unshift @comments, $phrase =~ /($comment)/go;
+        $phrase =~ s/$comment//go;
+
+        $phrase =~ s/\\(.)/$1/g if $phrase =~ s/\A\s*"(.*)"\s*\z/$1/;
       }
 
-      return if $user =~ /\P{ASCII}/;
-      return if $host =~ /\P{ASCII}/;
-
-      my ($phrase)       = /($display_name)/o;
-
-      for ( $phrase, $host, $user, @comments ) {
+      for ( $phrase, $address, @comments ) {
         next unless defined $_;
         s/^\s+//;
         s/\s+$//;
         $_ = undef unless length $_;
       }
 
-      my $new_comment = join q{ }, @comments;
-      push @addrs,
-        $class->new($phrase, "$user\@$host", $new_comment, $original);
+      my $new_comment = join q{ }, grep defined, @comments;
+      push @addrs, $class->new($phrase, $address, $new_comment, $original);
       $addrs[-1]->[_IN_CACHE] = [ \$line, $#addrs ]
     }
 
@@ -441,7 +442,7 @@ sub _enquoted_phrase {
   return $phrase if $phrase =~ /\A=\?.+\?=\z/;
 
   $phrase =~ s/\A"(.+)"\z/$1/;
-  $phrase =~ s/\"/\\"/g;
+  $phrase =~ s/([\\"])/\\$1/g;
 
   return qq{"$phrase"};
 }
