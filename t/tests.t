@@ -1618,7 +1618,37 @@ my @list = (
         undef,
       ],
     ],
-  ]
+  ],
+  [
+    '"Newsletter from <superm-- ATAT --rket>" <newsletter-- ATAT --example.com>',
+    [
+      [
+        "Newsletter from <superm-- ATAT --rket>",
+        'newsletter-- ATAT --example.com',
+        undef,
+      ],
+    ],
+  ],
+  [
+    '"Lawrence \\"Yogi\\" Berra" <yogi-- ATAT --example.com>',
+    [
+      [
+        'Lawrence "Yogi" Berra',
+        'yogi-- ATAT --example.com',
+        undef,
+      ],
+    ],
+  ],
+  [
+    '"Peter \Sales Department" <peter-- ATAT --example.com>',
+    [
+      [
+        "Peter Sales Department",
+        'peter-- ATAT --example.com',
+        undef,
+      ],
+    ],
+  ],
 );
 
 my $tests = 1;

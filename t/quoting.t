@@ -38,7 +38,8 @@ is(
 is($ea3->phrase, $phrase, "the phrase method returns the right thing");
 
 {
-    my $ea = Email::Address->new(q{jack "\\" robinson}, 'jack@work.com');
+    my $mailbox = q{"jack \\"\\\\\\" robinson" <jack@work.com>};
+    my ($ea) = Email::Address->parse($mailbox);
     is $ea->phrase, q{jack "\\" robinson};
     is $ea->format, q{"jack \\"\\\\\\" robinson" <jack@work.com>};
 }
