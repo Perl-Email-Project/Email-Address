@@ -441,7 +441,7 @@ sub _enquoted_phrase {
   return $phrase if $phrase =~ /\A=\?.+\?=\z/;
 
   $phrase =~ s/\A"(.+)"\z/$1/;
-  $phrase =~ s/\"/\\"/g;
+  $phrase =~ s/([\\"])/\\$1/g;
 
   return qq{"$phrase"};
 }
