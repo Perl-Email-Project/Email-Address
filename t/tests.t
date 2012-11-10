@@ -1584,16 +1584,16 @@ my @list = (
       ]
     ]
   ],
-  [ 
-    'Jason W. May <jmay-- ATAT --x.example.com>',                                   
-    [                                                                           
-      [                                                                         
-        'Jason W. May',                                                         
-        'jmay-- ATAT --x.example.com',                                              
-        undef                                                                   
-      ]                                                                         
-    ]                                                                           
-  ],                                                                            
+  [
+    'Jason W. May <jmay-- ATAT --x.example.com>',
+    [
+      [
+        'Jason W. May',
+        'jmay-- ATAT --x.example.com',
+        undef
+      ]
+    ]
+  ],
   [
     '"Jason W. May" <jmay-- ATAT --x.example.com>, advocacy-- ATAT --p.example.org',
     [
