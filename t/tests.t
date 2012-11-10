@@ -1485,10 +1485,10 @@ my @list = (
     ]
   ],
   [
-    '"Greg Norris (humble visionary genius)" <nextrightmove-- ATAT --bang.example.net>, <advocacy-- ATAT --p.example.org>',
+    '"Greg Smith (humble visionary genius)" <nextrightmove-- ATAT --bang.example.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
-        '"Greg Norris"',
+        '"Greg Smith"',
         'nextrightmove-- ATAT --bang.example.net',
         '(humble visionary genius)'
       ],
@@ -1500,10 +1500,10 @@ my @list = (
     ]
   ],
   [
-    '"Greg Norris \\(humble visionary genius\\)" <nextrightmove-- ATAT --bang.example.net>',
+    '"Greg Jones \\(humble visionary genius\\)" <nextrightmove-- ATAT --bang.example.net>',
     [
       [
-        '"Greg Norris \\(humble visionary genius\\)"',
+        '"Greg Jones \\(humble visionary genius\\)"',
         'nextrightmove-- ATAT --bang.example.net',
         undef
       ]
