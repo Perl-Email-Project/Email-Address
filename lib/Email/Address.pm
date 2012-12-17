@@ -228,8 +228,8 @@ sub parse {
           ($user, $host) = ($1, $2);
       }
 
-      return if $user =~ /\P{ASCII}/;
-      return if $host =~ /\P{ASCII}/;
+      next if $user =~ /\P{ASCII}/;
+      next if $host =~ /\P{ASCII}/;
 
       my ($phrase)       = /($display_name)/o;
 

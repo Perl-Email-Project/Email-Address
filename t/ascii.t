@@ -44,4 +44,16 @@ my $bad_mixed = qq{"$text" <$text>};
   # ok( $text =~ $Email::Address::addr_spec, "...it !~ addr_spec");
 }
 
+{
+  my @addr = Email::Address->parse(qq{
+    "Not ascii phras\x{e9}" <good\@email>,
+    b\x{e3}d\@user,
+    bad\@d\x{f6}main,
+    not.bad\@again
+  });
+  is scalar @addr, 2, "correct number of good emails";
+  is "$addr[0]", qq{"Not ascii phras\x{e9}" <good\@email>}, "expected email";
+  is "$addr[1]", qq{not.bad\@again}, "expected email";
+}
+
 done_testing;
