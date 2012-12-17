@@ -1,5 +1,11 @@
 Release history for Email-Address
 
+1.897     2012-12-17
+          skip mailboxes, rather than aborting the whole parse, when
+          encountering non-ASCII characters (thanks, Ruslan Zakirov!)
+
+          improve the behavior of escaping in phrases (thanks, Ruslan Zakirov!)
+
 1.896     2012-07-31
           documentation improvements (thanks, Glenn Fowler!)
 
