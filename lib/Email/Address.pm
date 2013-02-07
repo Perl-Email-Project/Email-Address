@@ -10,7 +10,7 @@ use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
 
 my $NOCACHE;
 
-$VERSION              = '1.897';
+$VERSION              = '1.898';
 $COMMENT_NEST_LEVEL ||= 2;
 $STRINGIFY          ||= 'format';
 $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # who wants //=? me!
@@ -30,7 +30,7 @@ Email::Address - RFC 2822 Address Parsing and Creation
 
 =head1 VERSION
 
-version 1.897
+version 1.898
 
 =head1 DESCRIPTION
 
@@ -555,12 +555,6 @@ On his 1.8GHz Apple MacBook, rjbs gets these results:
 ...unfortunately, a known bug causes a loss of speed the string to parse has
 certain known characteristics, and disabling cache will also degrade
 performance.
-
-=head1 PERL EMAIL PROJECT
-
-This module is maintained by the Perl Email Project
-
-L<http://emailproject.perl.org/wiki/Email::Address>
 
 =head1 SEE ALSO
 

@@ -1,5 +1,8 @@
 Release history for Email-Address
 
+1.898     2013-02-07
+          remove dead link
+
 1.897     2012-12-17
           skip mailboxes, rather than aborting the whole parse, when
           encountering non-ASCII characters (thanks, Ruslan Zakirov!)
