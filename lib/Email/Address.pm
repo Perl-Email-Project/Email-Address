@@ -131,7 +131,7 @@ with an optional preceding display name, also known as the C<phrase>.
 
 =item $Email::Address::mailbox
 
-This is the complete regular expression defining an RFC 2822 emial
+This is the complete regular expression defining an RFC 2822 email
 address with an optional preceding display name and optional
 following comment.
 
@@ -163,7 +163,7 @@ sub _IN_CACHE () { 4 }
 This method returns a list of C<Email::Address> objects it finds
 in the input string.
 
-The specification for an email address allows for infinitley
+The specification for an email address allows for infinitely
 nestable comments. That's nice in theory, but a little over done.
 By default this module allows for two (C<2>) levels of nested
 comments. If you think you need more, modify the
