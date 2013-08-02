@@ -1,5 +1,19 @@
 Release history for Email-Address
 
+{{$NEXT}}
+
+1.899     2013-08-02 10:53:19 America/New_York
+          repackaged, pointed at new bugtracker
+
+          fallback overloads are enabled, so "cmp" will now compare with string
+          overloads... which still might not be what you expect
+
+          code has been futzed with to rely on some 5.6-isms, rather than
+          trying to be 5.005 compatible
+
+          a warning has been added: calling ->parse in scalar context gets
+          undefined behavior
+
 1.898     2013-02-07
           remove dead link
 
