@@ -521,7 +521,7 @@ sub as_string {
   $_[0]->can($STRINGIFY)->($_[0]);
 }
 
-use overload '""' => 'as_string';
+use overload '""' => 'as_string', fallback => 1;
 
 =pod
 
