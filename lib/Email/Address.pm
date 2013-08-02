@@ -391,9 +391,9 @@ object.
 =cut
 
 sub format {
-    local $^W = 0; ## no critic
-    return $FORMAT_CACHE{"@{$_[0]}"} if exists $FORMAT_CACHE{"@{$_[0]}"};
-    $FORMAT_CACHE{"@{$_[0]}"} = $_[0]->_format;
+    my $cache_str = do { no warnings 'uninitialized'; "@{$_[0]}" };
+    return $FORMAT_CACHE{$cache_str} if exists $FORMAT_CACHE{$cache_str};
+    $FORMAT_CACHE{$cache_str} = $_[0]->_format;
 }
 
 sub _format {
@@ -408,7 +408,9 @@ sub _format {
     }
 
     my $format = sprintf q{%s <%s> %s},
-                 $self->_enquoted_phrase, $self->[_ADDRESS], $self->[_COMMENT];
+                 $self->_enquoted_phrase,
+                 (defined $self->[_ADDRESS] ? $self->[_ADDRESS] : ''),
+                 (defined $self->[_COMMENT] ? $self->[_COMMENT] : '');
 
     $format =~ s/^\s+//;
     $format =~ s/\s+$//;
@@ -446,8 +448,9 @@ name capitalized, or if they're Irish?
 =cut
 
 sub name {
-    local $^W = 0;
-    return $NAME_CACHE{"@{$_[0]}"} if exists $NAME_CACHE{"@{$_[0]}"};
+    my $cache_str = do { no warnings 'uninitialized'; "@{$_[0]}" };
+    return $NAME_CACHE{$cache_str} if exists $NAME_CACHE{$cache_str};
+
     my ($self) = @_;
     my $name = q{};
     if ( $name = $self->[_PHRASE] ) {
@@ -462,7 +465,7 @@ sub name {
     } else {
         ($name) = $self->[_ADDRESS] =~ /($local_part)\@/o;
     }
-    $NAME_CACHE{"@{$_[0]}"} = $name;
+    $NAME_CACHE{$cache_str} = $name;
 }
 
 =back
