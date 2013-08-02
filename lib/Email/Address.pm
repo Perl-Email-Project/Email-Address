@@ -160,15 +160,14 @@ sub _IN_CACHE () { 4 }
     q[me@local, Casey <me@local>, "Casey" <me@local> (West)]
   );
 
-This method returns a list of C<Email::Address> objects it finds
-in the input string.
+This method returns a list of C<Email::Address> objects it finds in the input
+string.  B<Please note> that it returns a list, and expects that it may find
+multiple addresses.  The behavior in scalar context is undefined.
 
-The specification for an email address allows for infinitely
-nestable comments. That's nice in theory, but a little over done.
-By default this module allows for two (C<2>) levels of nested
-comments. If you think you need more, modify the
-C<$Email::Address::COMMENT_NEST_LEVEL> package variable to allow
-more.
+The specification for an email address allows for infinitely nestable comments.
+That's nice in theory, but a little over done.  By default this module allows
+for two (C<2>) levels of nested comments. If you think you need more, modify
+the C<$Email::Address::COMMENT_NEST_LEVEL> package variable to allow more.
 
   $Email::Address::COMMENT_NEST_LEVEL = 10; # I'm deep
 
