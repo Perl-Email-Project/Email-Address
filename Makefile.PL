@@ -10,5 +10,10 @@ WriteMakefile (
     'Test::More' => '0.47',
   },
   VERSION_FROM  => 'lib/Email/Address.pm',
+  META_MERGE        => {
+    resources => {
+      repository  =>  'https://github.com/rjbs/Email-Address',
+    },
+  },
   clean               => { FILES => 'Time-Piece-MSSQL-* cover_db' },
 );
