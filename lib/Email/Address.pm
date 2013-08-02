@@ -211,19 +211,16 @@ sub parse {
       my @comments = /($comment)/go;
       s/$comment//go if @comments;
 
-      my ($user, $host, $com);
-      ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>//o;
-      if (! defined($user) || ! defined($host)) {
-          s/($local_part)\@($domain)//o;
-          ($user, $host) = ($1, $2);
-      }
+      next unless
+        /^($display_name?)(?:$cfws*)<($local_part)\@($domain)>(?:$cfws*)$/o
+        || /^()($local_part)\@($domain)$/o;
+
+      my ( $phrase, $user, $host ) = ( $1, $2, $3 );
 
       next if $user =~ /\P{ASCII}/;
       next if $host =~ /\P{ASCII}/;
 
-      my ($phrase)       = /($display_name)/o;
-
-      for ( $phrase, $host, $user, @comments ) {
+      for ( $phrase, $user, $host, @comments ) {
         next unless defined $_;
         s/^\s+//;
         s/\s+$//;
