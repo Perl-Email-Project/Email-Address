@@ -1,23 +1,11 @@
-package Email::Address;
 use strict;
-## no critic RequireUseWarnings
-# support pre-5.6
+use warnings;
+package Email::Address;
+# ABSTRACT: RFC 2822 Address Parsing and Creation
 
-use vars qw[$VERSION $COMMENT_NEST_LEVEL $STRINGIFY
-            $COLLAPSE_SPACES
-            %PARSE_CACHE %FORMAT_CACHE %NAME_CACHE
-            $addr_spec $angle_addr $name_addr $mailbox];
-
-my $NOCACHE;
-
-$VERSION              = '1.898';
-$COMMENT_NEST_LEVEL ||= 2;
-$STRINGIFY          ||= 'format';
-$COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # who wants //=? me!
-
-=head1 NAME
-
-Email::Address - RFC 2822 Address Parsing and Creation
+our $COMMENT_NEST_LEVEL ||= 2;
+our $STRINGIFY          ||= 'format';
+our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
 
 =head1 SYNOPSIS
 
@@ -139,10 +127,10 @@ following comment.
 
 =cut
 
-$addr_spec  = qr/$local_part\@$domain/;
-$angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
-$name_addr  = qr/$display_name?$angle_addr/;
-$mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
+our $addr_spec  = qr/$local_part\@$domain/;
+our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
+our $name_addr  = qr/$display_name?$angle_addr/;
+our $mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
 
 sub _PHRASE   () { 0 }
 sub _ADDRESS  () { 1 }
@@ -152,7 +140,7 @@ sub _IN_CACHE () { 4 }
 
 =head2 Class Methods
 
-=over 4
+=over
 
 =item parse
 
@@ -184,6 +172,9 @@ addresses be ASCII only.  Any non-ASCII content in the parsed addresses will
 cause the parser to return no results.
 
 =cut
+
+our (%PARSE_CACHE, %FORMAT_CACHE, %NAME_CACHE);
+my $NOCACHE;
 
 sub __get_cached_parse {
     return if $NOCACHE;
@@ -249,8 +240,6 @@ sub parse {
     return @addrs;
 }
 
-=pod
-
 =item new
 
   my $address = Email::Address->new(undef, 'casey@local');
@@ -270,8 +259,6 @@ sub new {
 
   bless [ $phrase, $email, $comment, $orig ] => $class;
 }
-
-=pod
 
 =item purge_cache
 
@@ -313,8 +300,6 @@ sub disable_cache {
 sub enable_cache {
   $NOCACHE = undef;
 }
-
-=pod
 
 =back
 
@@ -445,8 +430,6 @@ sub _enquoted_phrase {
   return qq{"$phrase"};
 }
 
-=pod
-
 =item name
 
   my $name = $address->name;
@@ -481,8 +464,6 @@ sub name {
     }
     $NAME_CACHE{"@{$_[0]}"} = $name;
 }
-
-=pod
 
 =back
 
@@ -555,25 +536,10 @@ On his 1.8GHz Apple MacBook, rjbs gets these results:
 certain known characteristics, and disabling cache will also degrade
 performance.
 
-=head1 SEE ALSO
-
-L<Email::Simple>, L<perl>.
-
-=head1 AUTHOR
-
-Originally by Casey West, <F<casey@geeknest.com>>.
-
-Maintained, 2006-2007, Ricardo SIGNES <F<rjbs@cpan.org>>.
-
 =head1 ACKNOWLEDGEMENTS
 
-Thanks to Kevin Riggle and Tatsuhiko Miyagawa for tests for annoying phrase-quoting bugs!
-
-=head1 COPYRIGHT
-
-Copyright (c) 2004 Casey West.  All rights reserved.  This module is free
-software; you can redistribute it and/or modify it under the same terms as Perl
-itself.
+Thanks to Kevin Riggle and Tatsuhiko Miyagawa for tests for annoying
+phrase-quoting bugs!
 
 =cut
 
