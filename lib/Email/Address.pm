@@ -423,6 +423,8 @@ sub _enquoted_phrase {
 
   my $phrase = $self->[_PHRASE];
 
+  return '' unless defined $phrase;
+
   # if it's encoded -- rjbs, 2007-02-28
   return $phrase if $phrase =~ /\A=\?.+\?=\z/;
 
