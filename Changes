@@ -2,6 +2,10 @@ Release history for Email-Address
 
 {{$NEXT}}
 
+1.900     2013-08-08 14:44:43 America/New_York
+          avoid trying to stringify undef, and so avoid a warning (thanks, Alex
+          Vandiver)
+
 1.899     2013-08-02 10:53:19 America/New_York
           repackaged, pointed at new bugtracker
 
