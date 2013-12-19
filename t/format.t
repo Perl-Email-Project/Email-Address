@@ -37,6 +37,14 @@ my @tests = (
     ],
     q{"Name Surrounded With Quotes" <foobar@example.com>},
   ],
+  [
+    [
+      "",
+      undef,
+      undef,
+    ],
+    '',
+  ],
 );
 
 plan tests => scalar @tests;
