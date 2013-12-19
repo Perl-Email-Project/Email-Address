@@ -404,7 +404,7 @@ sub _format {
       ||
       defined $self->[_COMMENT] && length $self->[_COMMENT]
     ) {
-        return $self->[_ADDRESS];
+        return defined $self->[_ADDRESS] ? $self->[_ADDRESS] : '';
     }
 
     my $format = sprintf q{%s <%s> %s},
