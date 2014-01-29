@@ -2,6 +2,10 @@ Release history for Email-Address
 
 {{$NEXT}}
 
+1.901     2014-01-28 22:41:54-05:00 America/New_York
+          further avoidance of stringifying to undef (thanks, this time, to
+          David Golden)
+
 1.900     2013-08-08 14:44:43 America/New_York
           avoid trying to stringify undef, and so avoid a warning (thanks, Alex
           Vandiver)
