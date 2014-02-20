@@ -1638,9 +1638,9 @@ for (@list) {
   foreach (@addrs) {
       isa_ok($_, 'Email::Address');
       my $test = shift @tests;
-      is($_->format,    $test->format, "format: " . $test->format);
-      is($_->as_string, $test->format, "format: " . $test->format);
-      is("$_",          $test->format, "stringify: $_");
-      is($_->name,      $test->name,   "name: " . $test->name);
+      is($_->format,    $test->format,    "format: " . $test->format);
+      is($_->as_string, $test->as_string, "as_string: " . $test->as_string);
+      is("$_",          $test->format,    "stringify: $_");
+      is($_->name,      $test->name,      "name: " . $test->name);
   }
 }
