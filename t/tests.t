@@ -1629,18 +1629,18 @@ plan tests => $tests;
 use_ok 'Email::Address';
 
 for (@list) {
-  $_->[0] =~ s/-- ATAT --/@/g;
-  my @addrs = Email::Address->parse($_->[0]);
-  my @tests =
-    map { Email::Address->new(map { $_ ? do {s/-- ATAT --/@/g; $_} : $_ } @$_) }
-    @{$_->[1]};
+    $_->[0] =~ s/-- ATAT --/@/g;
+    my @addrs = Email::Address->parse($_->[0]);
+    my @tests =
+      map { Email::Address->new(map { $_ ? do {s/-- ATAT --/@/g; $_} : $_ } @$_) }
+      @{$_->[1]};
 
-  foreach (@addrs) {
-      isa_ok($_, 'Email::Address');
-      my $test = shift @tests;
-      is($_->format,    $test->format,    "format: " . $test->format);
-      is($_->as_string, $test->as_string, "as_string: " . $test->as_string);
-      is("$_",          $test->format,    "stringify: $_");
-      is($_->name,      $test->name,      "name: " . $test->name);
-  }
+    foreach (@addrs) {
+        isa_ok($_, 'Email::Address');
+        my $test = shift @tests;
+        is($_->format,    $test->format,    "format: " . $test->format);
+        is($_->as_string, $test->as_string, "as_string: " . $test->as_string);
+        is("$_",          $test->format,    "stringify: $_");
+        is($_->name,      $test->name,      "name: " . $test->name);
+    }
 }
