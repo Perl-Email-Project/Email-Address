@@ -1584,16 +1584,16 @@ my @list = (
       ]
     ]
   ],
-  [ 
-    'Jason W. May <jmay-- ATAT --x.example.com>',                                   
-    [                                                                           
-      [                                                                         
-        'Jason W. May',                                                         
-        'jmay-- ATAT --x.example.com',                                              
-        undef                                                                   
-      ]                                                                         
-    ]                                                                           
-  ],                                                                            
+  [
+    'Jason W. May <jmay-- ATAT --x.example.com>',
+    [
+      [
+        'Jason W. May',
+        'jmay-- ATAT --x.example.com',
+        undef
+      ]
+    ]
+  ],
   [
     '"Jason W. May" <jmay-- ATAT --x.example.com>, advocacy-- ATAT --p.example.org',
     [
@@ -1618,29 +1618,108 @@ my @list = (
         undef,
       ],
     ],
-  ]
+  ],
+);
+
+my @domain_list = (@list,
+  [
+    'jibsheet',
+    [],
+  ],
+  [
+    'alexmv@example.com, jibsheet, jesse@example.com',
+    [
+      [
+        undef,
+        'alexmv-- ATAT --example.com',
+        undef,
+      ],
+      [
+        undef,
+        'jesse-- ATAT --example.com',
+        undef,
+      ],
+    ],
+  ],
+);
+
+my @domainless_list = (@list,
+  [
+    'falcone',
+    [
+      [
+        undef,
+        'falcone',
+        undef
+      ],
+    ]
+  ],
+  [
+    'falcone, alexmv',
+    [
+      [
+        undef,
+        'falcone',
+        undef
+      ],
+      [
+        undef,
+        'alexmv',
+        undef
+      ],
+    ]
+  ],
+  [
+    'alexmv@example.com, jibsheet, jesse@example.com',
+    [
+      [
+        undef,
+        'alexmv-- ATAT --example.com',
+        undef,
+      ],
+      [
+        undef,
+        'jibsheet',
+        undef,
+      ],
+      [
+        undef,
+        'jesse-- ATAT --example.com',
+        undef,
+      ],
+    ],
+  ],
 );
 
 my $tests = 1;
-$tests += @{ $_->[1] } * 5 for @list;
+$tests += 1 + @{ $_->[1] } * 5 for @domain_list;
+$tests += 1 + @{ $_->[1] } * 5 for @domainless_list;
 
 plan tests => $tests;
 
 use_ok 'Email::Address';
 
-for (@list) {
-  $_->[0] =~ s/-- ATAT --/@/g;
-  my @addrs = Email::Address->parse($_->[0]);
-  my @tests =
-    map { Email::Address->new(map { $_ ? do {s/-- ATAT --/@/g; $_} : $_ } @$_) }
-    @{$_->[1]};
+for ([parse => \@domain_list], [parse_allow_domainless => \@domainless_list]) {
+    my ($method,$list) = @$_;
+    for (@$list) {
+        my ($string, $expect) = @$_;
 
-  foreach (@addrs) {
-      isa_ok($_, 'Email::Address');
-      my $test = shift @tests;
-      is($_->format,    $test->format, "format: " . $test->format);
-      is($_->as_string, $test->format, "format: " . $test->format);
-      is("$_",          $test->format, "stringify: $_");
-      is($_->name,      $test->name,   "name: " . $test->name);
-  }
+        $string =~ s/-- ATAT --/@/g;
+        my @addrs = Email::Address->$method($string);
+
+        is(@addrs, @$expect, "got correct number of results from $method {$string}");
+
+        my @tests =
+          map { Email::Address->new(map { s/-- ATAT --/@/g if $_; $_ } @$_) }
+          @$expect;
+
+        foreach (@addrs) {
+            isa_ok($_, 'Email::Address');
+            my $test = shift @tests;
+            is($_->format,    $test->format,    "format: " . $test->format);
+            is($_->as_string, $test->as_string, "as_string: " . $test->as_string);
+            is("$_",          $test->format,    "stringify: $_");
+            is($_->name,      $test->name,      "name: " . $test->name);
+        }
+    }
 }

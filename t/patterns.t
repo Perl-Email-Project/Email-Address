@@ -39,9 +39,11 @@ my %tests = (
         [ '"Richard Sonnen" <sonnen@frii.com>',             1 ],
         [ '"Richard Sonnen" <sonnen@frii.com> (comments)',  1 ],
         [ '',                           0 ],
-        [ 'foo',                        0 ],
         [ 'foo bar@bar.com',            0 ],
         [ '<foo bar>@bar.com',          0 ],
+    ],
+    mailbox_domainless => [
+        [ 'foo',                        1 ],
     ],
 );
 
@@ -55,7 +57,7 @@ my %pats = map {
     my $pat;
     eval '$pat = $Email::Address::'.$_;
     ($_ => $pat);
-} qw( addr_spec angle_addr name_addr mailbox );
+} qw( addr_spec angle_addr name_addr mailbox mailbox_domainless);
 
 for my $pattern_name (keys %tests) {
     for my $test (@{ $tests{$pattern_name} }) {
