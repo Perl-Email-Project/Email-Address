@@ -408,7 +408,7 @@ sub _format {
     }
 
     my $comment = defined $self->[_COMMENT] ? $self->[_COMMENT] : '';
-    $comment = "($comment)" if $comment and $comment !~ /\A\(.*\)\z/;
+    $comment = "($comment)" if length $comment and $comment !~ /\A\(.*\)\z/;
 
     my $format = sprintf q{%s <%s> %s},
                  $self->_enquoted_phrase,
