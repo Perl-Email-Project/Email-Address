@@ -407,10 +407,13 @@ sub _format {
         return defined $self->[_ADDRESS] ? $self->[_ADDRESS] : '';
     }
 
+    my $comment = defined $self->[_COMMENT] ? $self->[_COMMENT] : '';
+    $comment = "($comment)" if $comment and $comment !~ /\A\(.*\)\z/;
+
     my $format = sprintf q{%s <%s> %s},
                  $self->_enquoted_phrase,
                  (defined $self->[_ADDRESS] ? $self->[_ADDRESS] : ''),
-                 (defined $self->[_COMMENT] ? $self->[_COMMENT] : '');
+                 $comment;
 
     $format =~ s/^\s+//;
     $format =~ s/\s+$//;
@@ -423,7 +426,7 @@ sub _enquoted_phrase {
 
   my $phrase = $self->[_PHRASE];
 
-  return '' unless defined $phrase;
+  return '' unless defined $phrase and length $phrase;
 
   # if it's encoded -- rjbs, 2007-02-28
   return $phrase if $phrase =~ /\A=\?.+\?=\z/;
