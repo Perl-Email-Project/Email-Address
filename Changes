@@ -1,6 +1,8 @@
 Release history for Email-Address
 
 {{$NEXT}}
+
+1.902     2014-04-17 10:45:11-04:00 America/New_York
         - when formatting an address where phrase is empty but comment is not,
           do not include "" for the phrase; just omit it
         - when formatting and address where comment lacks enclosing parens, add
