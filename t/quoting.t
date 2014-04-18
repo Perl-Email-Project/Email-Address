@@ -2,7 +2,7 @@
 use strict;
 
 use Email::Address;
-use Test::More tests => 8;
+use Test::More tests => 12;
 
 my $phrase = q{jack!work};
 my $email  = 'jack@work.com';
@@ -42,3 +42,27 @@ is($ea3->phrase, $phrase, "the phrase method returns the right thing");
     is $ea->phrase, q{jack "\\" robinson};
     is $ea->format, q{"jack \\"\\\\\\" robinson" <jack@work.com>};
 }
+
+is(
+  Email::Address->new('X', 'Y@example.mil', 'Z')->format,
+  q{"X" <Y@example.mil> (Z)},
+  'we parenthesize comments',
+);
+
+is(
+  Email::Address->new('X', 'Y@example.mil', '0')->format,
+  q{"X" <Y@example.mil> (0)},
+  'we parenthesize comments',
+);
+
+is(
+  Email::Address->new(undef, 'Y@example.mil', '0')->format,
+  q{<Y@example.mil> (0)},
+  'we do not provide an empty phrase',
+);
+
+is(
+  Email::Address->new('', 'Y@example.mil', '0')->format,
+  q{<Y@example.mil> (0)},
+  'we do not provide an empty phrase',
+);
