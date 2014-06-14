@@ -1,6 +1,8 @@
 Release history for Email-Address
 
 {{$NEXT}}
+        - avoid being fooled by an addr-like string in the phrase
+        - avoid a slowdown by avoiding backtracking into the phrase
 
 1.903     2014-04-17 21:02:14-04:00 America/New_York
         - correctly parenthesize false comment "0" (sigh)
