@@ -129,7 +129,7 @@ following comment.
 
 our $addr_spec  = qr/$local_part\@$domain/;
 our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
-our $name_addr  = qr/$display_name?$angle_addr/;
+our $name_addr  = qr/(?>$display_name?)$angle_addr/;
 our $mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
 
 sub _PHRASE   () { 0 }
