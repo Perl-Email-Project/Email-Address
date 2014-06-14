@@ -221,7 +221,7 @@ sub parse {
       s/$comment//go if @comments;
 
       my ($user, $host, $com);
-      ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>//o;
+      ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>\s*\z//o;
       if (! defined($user) || ! defined($host)) {
           s/($local_part)\@($domain)//o;
           ($user, $host) = ($1, $2);
