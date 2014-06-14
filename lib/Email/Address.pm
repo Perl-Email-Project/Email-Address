@@ -138,6 +138,15 @@ sub _COMMENT  () { 2 }
 sub _ORIGINAL () { 3 }
 sub _IN_CACHE () { 4 }
 
+sub __dump {
+  return {
+    phrase   => $_[0][_PHRASE],
+    address  => $_[0][_ADDRESS],
+    comment  => $_[0][_COMMENT],
+    original => $_[0][_ORIGINAL],
+  }
+}
+
 =head2 Class Methods
 
 =over
