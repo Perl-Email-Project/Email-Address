@@ -1618,7 +1618,17 @@ my @list = (
         undef,
       ],
     ],
-  ]
+  ],
+  [
+    q{"<fake-- ATAT --bogus.biz>" <real-- ATAT --actual.mil>},
+    [
+      [
+        '<fake-- ATAT --bogus.biz>',
+        'real-- ATAT --actual.mil',
+        undef,
+      ],
+    ],
+  ],
 );
 
 my $tests = 1;
