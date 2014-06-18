@@ -51,7 +51,7 @@ my $dot_atom       = qr/$cfws*$dot_atom_text$cfws*/;
 
 my $qtext          = qr/[^\\"]/;
 my $qcontent       = qr/$qtext|$quoted_pair/;
-my $quoted_string  = qr/$cfws*"$qcontent+"$cfws*/;
+my $quoted_string  = qr/$cfws*"$qcontent*"$cfws*/;
 
 my $word           = qr/$atom|$quoted_string/;
 
