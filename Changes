@@ -2,6 +2,10 @@ Release history for Email-Address
 
 {{$NEXT}}
 
+1.905     2014-06-17 22:55:00-04:00 America/New_York
+        - additional change to avoid slowdown; this addresses CVE-2014-0477
+          change provided by Bastian Blank <waldi@debian.org>
+
 1.904     2014-06-14 00:21:21-04:00 America/New_York (TRIAL RELEASE)
         - avoid being fooled by an addr-like string in the phrase
         - avoid a slowdown by avoiding backtracking into the phrase
