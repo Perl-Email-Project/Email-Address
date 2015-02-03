@@ -1503,7 +1503,7 @@ my @list = (
     '"Greg Norris \\(humble visionary genius\\)" <nextrightmove-- ATAT --bang.example.net>',
     [
       [
-        'Greg Norris \\(humble visionary genius\\)',
+        'Greg Norris (humble visionary genius)',
         'nextrightmove-- ATAT --bang.example.net',
         undef
       ]
@@ -1513,7 +1513,7 @@ my @list = (
     '"Greg Norris humble visionary genius\\"" <nextrightmove-- ATAT --bang.example.net>',
     [
       [
-        'Greg Norris humble visionary genius\\"',
+        'Greg Norris humble visionary genius"',
         'nextrightmove-- ATAT --bang.example.net',
         undef
       ]

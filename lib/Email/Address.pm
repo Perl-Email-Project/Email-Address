@@ -239,6 +239,8 @@ sub parse {
         $_ = undef unless length $_;
       }
 
+      $phrase =~ s/\\(.)/$1/g if $phrase;
+
       my $new_comment = join q{ }, @comments;
       push @addrs,
         $class->new($phrase, "$user\@$host", $new_comment, $original);
