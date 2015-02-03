@@ -1,6 +1,8 @@
 Release history for Email-Address
 
 {{$NEXT}}
+
+1.906     2015-02-03 16:48:11-05:00 America/New_York
         - the test suite tests parses more directly, which eliminates a number
           of misleading (and possibly wrong) test cases
         - escaped characters in a quoted string are now properly unescaped
