@@ -1,6 +1,11 @@
 Release history for Email-Address
 
 {{$NEXT}}
+        - the test suite tests parses more directly, which eliminates a number
+          of misleading (and possibly wrong) test cases
+        - escaped characters in a quoted string are now properly unescaped
+          for the ->phrase method, which means things should round trip better
+          from their decomposed form
 
 1.905     2014-06-17 22:55:00-04:00 America/New_York
         - additional change to avoid slowdown; this addresses CVE-2014-0477
