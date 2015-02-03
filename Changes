@@ -1,6 +1,7 @@
 Release history for Email-Address
 
 {{$NEXT}}
+        - restore 5.8.x compatibility
 
 1.906     2015-02-03 16:48:11-05:00 America/New_York
         - the test suite tests parses more directly, which eliminates a number

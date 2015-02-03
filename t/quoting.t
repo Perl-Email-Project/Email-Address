@@ -38,7 +38,7 @@ is(
 is($ea3->phrase, $phrase, "the phrase method returns the right thing");
 
 {
-    my $B = qq{\N{REVERSE SOLIDUS}};
+    my $B = chr 0x5C; # \
     my $phrase = qq{jack "$B" robinson};
     my $ea = Email::Address->new($phrase, 'jack@work.com');
     is $ea->phrase, $phrase, "phrase round trips via ->new";
