@@ -2,7 +2,7 @@
 use strict;
 
 use Email::Address;
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 my $phrase = q{jack!work};
 my $email  = 'jack@work.com';
@@ -38,9 +38,14 @@ is(
 is($ea3->phrase, $phrase, "the phrase method returns the right thing");
 
 {
-    my $ea = Email::Address->new(q{jack "\\" robinson}, 'jack@work.com');
-    is $ea->phrase, q{jack "\\" robinson};
-    is $ea->format, q{"jack \\"\\\\\\" robinson" <jack@work.com>};
+    my $B = qq{\N{REVERSE SOLIDUS}};
+    my $phrase = qq{jack "$B" robinson};
+    my $ea = Email::Address->new($phrase, 'jack@work.com');
+    is $ea->phrase, $phrase, "phrase round trips via ->new";
+    is $ea->format, qq{"jack $B"$B$B$B" robinson" <jack\@work.com>};
+
+    my ($addr) = Email::Address->parse( $ea->format );
+    is($addr->format, $ea->format, "round trip safely");
 }
 
 is(
