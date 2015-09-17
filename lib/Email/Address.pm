@@ -3,7 +3,7 @@ use warnings;
 package Email::Address;
 # ABSTRACT: RFC 2822 Address Parsing and Creation
 
-our $COMMENT_NEST_LEVEL ||= 2;
+our $COMMENT_NEST_LEVEL ||= 1;
 our $STRINGIFY          ||= 'format';
 our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
 
@@ -15,10 +15,6 @@ our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
   my $address   = Email::Address->new(Casey => 'casey@localhost');
 
   print $address->format;
-
-=head1 VERSION
-
-version 1.898
 
 =head1 DESCRIPTION
 
@@ -163,8 +159,8 @@ multiple addresses.  The behavior in scalar context is undefined.
 
 The specification for an email address allows for infinitely nestable comments.
 That's nice in theory, but a little over done.  By default this module allows
-for two (C<2>) levels of nested comments. If you think you need more, modify
-the C<$Email::Address::COMMENT_NEST_LEVEL> package variable to allow more.
+for one (C<1>) level of nested comments. If you think you need more, modify the
+C<$Email::Address::COMMENT_NEST_LEVEL> package variable to allow more.
 
   $Email::Address::COMMENT_NEST_LEVEL = 10; # I'm deep
 

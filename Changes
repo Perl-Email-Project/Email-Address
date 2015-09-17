@@ -1,6 +1,7 @@
 Release history for Email-Address
 
 {{$NEXT}}
+        - default to 1 level of nested comments to avoid pathological behaviors
 
 1.907     2015-02-03 17:48:10-05:00 America/New_York
         - restore 5.8.x compatibility
