@@ -6,6 +6,7 @@ package Email::Address;
 our $COMMENT_NEST_LEVEL ||= 1;
 our $STRINGIFY          ||= 'format';
 our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
+our $UNICODE            ||= 0;
 
 =head1 SYNOPSIS
 
@@ -172,9 +173,10 @@ collapse multiple spaces into a single space, which avoids this problem.  To
 prevent this behavior, set C<$Email::Address::COLLAPSE_SPACES> to zero.  This
 variable will go away when the bug is resolved properly.
 
-In accordance with RFC 822 and its descendants, this module demands that email
-addresses be ASCII only.  Any non-ASCII content in the parsed addresses will
-cause the parser to return no results.
+By default, this module mandates that email addresses be ASCII only, and any
+non-ASCII content will cause a blank result. This matches RFCs 822, 2822, and
+5322. If you wish to allow UTF-8 characters in email, as per RFCs 5335 and
+6532, set C<$Email:Address::UNICODE> to 1.
 
 =cut
 
@@ -223,8 +225,10 @@ sub parse {
           ($user, $host) = ($1, $2);
       }
 
-      next if $user =~ /\P{ASCII}/;
-      next if $host =~ /\P{ASCII}/;
+      unless ($UNICODE) {
+          next if $user =~ /\P{ASCII}/;
+          next if $host =~ /\P{ASCII}/;
+      }
 
       my ($phrase)       = /($display_name)/o;
 
