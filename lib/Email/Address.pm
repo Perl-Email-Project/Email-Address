@@ -5,7 +5,6 @@ package Email::Address;
 
 our $COMMENT_NEST_LEVEL ||= 1;
 our $STRINGIFY          ||= 'format';
-our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
 our $UNICODE            ||= 0;
 
 =head1 SYNOPSIS
@@ -37,25 +36,25 @@ for (1 .. $COMMENT_NEST_LEVEL) {
   $ccontent = qr/$ctext|$quoted_pair|$comment/;
   $comment  = qr/\($ccontent*\)/;
 }
-my $cfws           = qr/$comment|\s+/;
+my $cfws           = qr/(?>$comment|\s+)/;
 
 my $atext          = qq/[^$CTL$special\\s]/;
-my $atom           = qr/$cfws*$atext+$cfws*/;
+my $atom           = qr/$cfws*(?>$atext+)$cfws*/;
 my $dot_atom_text  = qr/$atext+(?:\.$atext+)*/;
-my $dot_atom       = qr/$cfws*$dot_atom_text$cfws*/;
+my $dot_atom       = qr/$cfws*(?>$dot_atom_text)$cfws*/;
 
 my $qtext          = qr/[^$CTL\\"]/;
 my $qcontent       = qr/$qtext|$quoted_pair/;
-my $quoted_string  = qr/$cfws*"$qcontent*"$cfws*/;
+my $quoted_string  = qr/$cfws*"(?>$qcontent*)"$cfws*/;
 
 my $word           = qr/$atom|$quoted_string/;
 
-my $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
-my $phrase         = qr/$obs_phrase|(?:$word+)/;
+my $obs_phrase     = qr/$word(?>(?:$word|\.|$cfws)*)/;
+my $phrase         = qr/$obs_phrase|(?>$word+)/;
 
 my $local_part     = qr/$dot_atom|$quoted_string/;
 my $dtext          = qr/[^$CTL\[\]\\]/;
-my $domain_literal = qr/$cfws*\[$dtext*\]$cfws*/;
+my $domain_literal = qr/$cfws*\[(?>$dtext*)\]$cfws*/;
 my $domain         = qr/$dot_atom|$domain_literal/;
 
 my $display_name   = $phrase;
@@ -109,7 +108,7 @@ following comment.
 
 our $addr_spec  = qr/$local_part\@$domain/;
 our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
-our $name_addr  = qr/(?>$display_name?)$angle_addr/;
+our $name_addr  = qr/$display_name?$angle_addr/;
 our $mailbox    = qr/$name_addr|$addr_spec/;
 
 sub _PHRASE   () { 0 }
@@ -150,12 +149,6 @@ C<$Email::Address::COMMENT_NEST_LEVEL> package variable to allow more.
 
 The reason for this hardly-limiting limitation is simple: efficiency.
 
-Long strings of whitespace can be problematic for this module to parse, a bug
-which has not yet been adequately addressed.  The default behavior is now to
-collapse multiple spaces into a single space, which avoids this problem.  To
-prevent this behavior, set C<$Email::Address::COLLAPSE_SPACES> to zero.  This
-variable will go away when the bug is resolved properly.
-
 By default, this module mandates that email addresses be ASCII only, and any
 non-ASCII content will cause a blank result. This matches RFCs 822, 2822, and
 5322. If you wish to allow UTF-8 characters in email, as per RFCs 5335 and
@@ -186,8 +179,6 @@ sub __cache_parse {
 sub parse {
     my ($class, $line) = @_;
     return unless $line;
-
-    $line =~ s/[ \t]+/ /g if $COLLAPSE_SPACES;
 
     if (my @cached = $class->__get_cached_parse($line)) {
         return @cached;
