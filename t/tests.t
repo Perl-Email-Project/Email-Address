@@ -1629,6 +1629,16 @@ my @list = (
       ],
     ],
   ],
+  [
+    q{"Matthew" <matthew-- ATAT --example.org> (Matthew (GSC))},
+    [
+      [
+        'Matthew',
+        'matthew-- ATAT --example.org',
+        'Matthew (GSC)',
+      ],
+    ],
+  ],
 );
 
 my $tests = 1;

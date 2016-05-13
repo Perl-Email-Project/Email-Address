@@ -3,9 +3,8 @@ use warnings;
 package Email::Address;
 # ABSTRACT: RFC 2822 Address Parsing and Creation
 
-our $COMMENT_NEST_LEVEL ||= 1;
-our $STRINGIFY          ||= 'format';
-our $UNICODE            ||= 0;
+our $STRINGIFY ||= 'format';
+our $UNICODE   ||= 0;
 
 =head1 SYNOPSIS
 
@@ -31,11 +30,7 @@ my $special        = q{()<>\\[\\]:;@\\\\,."};
 my $quoted_pair    = qr/\\[[:graph:] \t]/;
 
 my $ctext          = qr/[^$CTL()\\]/;
-my ($ccontent, $comment) = (q{})x2;
-for (1 .. $COMMENT_NEST_LEVEL) {
-  $ccontent = qr/$ctext|$quoted_pair|$comment/;
-  $comment  = qr/\($ccontent*\)/;
-}
+my $comment        = qr/(?<comment>\((?:$ctext|$quoted_pair|(?&comment))*\))/;
 my $cfws           = qr/(?>$comment|\s+)/;
 
 my $atext          = qq/[^$CTL$special\\s]/;
@@ -140,15 +135,6 @@ This method returns a list of C<Email::Address> objects it finds in the input
 string.  B<Please note> that it returns a list, and expects that it may find
 multiple addresses.  The behavior in scalar context is undefined.
 
-The specification for an email address allows for infinitely nestable comments.
-That's nice in theory, but a little over done.  By default this module allows
-for one (C<1>) level of nested comments. If you think you need more, modify the
-C<$Email::Address::COMMENT_NEST_LEVEL> package variable to allow more.
-
-  $Email::Address::COMMENT_NEST_LEVEL = 10; # I'm deep
-
-The reason for this hardly-limiting limitation is simple: efficiency.
-
 By default, this module mandates that email addresses be ASCII only, and any
 non-ASCII content will cause a blank result. This matches RFCs 822, 2822, and
 5322. If you wish to allow UTF-8 characters in email, as per RFCs 5335 and
@@ -184,19 +170,19 @@ sub parse {
         return @cached;
     }
 
-    my (@mailboxes) = ($line =~ /$mailbox/go);
     my @addrs;
-    foreach (@mailboxes) {
+    while ($line =~ /(?<mailbox>$mailbox)/go) {
+      local $_ = $+{mailbox};
       my $original = $_;
 
-      my @comments = /($comment)/go;
+      my @comments = /$comment/go;
       s/$comment//go if @comments;
 
       my ($user, $host, $com);
-      ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>\s*\z//o;
+      ($user, $host) = ($+{user}, $+{host}) if s/<(?<user>$local_part)\@(?<host>$domain)>\s*\z//o;
       if (! defined($user) || ! defined($host)) {
-          s/($local_part)\@($domain)//o;
-          ($user, $host) = ($1, $2);
+          s/(?<user>$local_part)\@(?<host>$domain)//o;
+          ($user, $host) = ($+{user}, $+{host});
       }
 
       unless ($UNICODE) {
