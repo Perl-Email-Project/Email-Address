@@ -1488,7 +1488,7 @@ my @list = (
     '"Greg Norris (humble visionary genius)" <nextrightmove-- ATAT --bang.example.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
-        'Greg Norris',
+        'Greg Norris ',
         'nextrightmove-- ATAT --bang.example.net',
         '(humble visionary genius)'
       ],

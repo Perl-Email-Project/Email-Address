@@ -29,15 +29,13 @@ to be correct, and very very fast.
 my $CTL            = q{\x00-\x1F\x7F};
 my $special        = q{()<>\\[\\]:;@\\\\,."};
 
-my $text           = qr/[^\x0A\x0D]/;
+my $quoted_pair    = qr/\\[[:graph:] \t]/;
 
-my $quoted_pair    = qr/\\$text/;
-
-my $ctext          = qr/(?>[^()\\]+)/;
+my $ctext          = qr/[^$CTL()\\]/;
 my ($ccontent, $comment) = (q{})x2;
 for (1 .. $COMMENT_NEST_LEVEL) {
   $ccontent = qr/$ctext|$quoted_pair|$comment/;
-  $comment  = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
+  $comment  = qr/\($ccontent*\)/;
 }
 my $cfws           = qr/$comment|\s+/;
 
@@ -46,33 +44,18 @@ my $atom           = qr/$cfws*$atext+$cfws*/;
 my $dot_atom_text  = qr/$atext+(?:\.$atext+)*/;
 my $dot_atom       = qr/$cfws*$dot_atom_text$cfws*/;
 
-my $qtext          = qr/[^\\"]/;
+my $qtext          = qr/[^$CTL\\"]/;
 my $qcontent       = qr/$qtext|$quoted_pair/;
 my $quoted_string  = qr/$cfws*"$qcontent*"$cfws*/;
 
 my $word           = qr/$atom|$quoted_string/;
 
-# XXX: This ($phrase) used to just be: my $phrase = qr/$word+/; It was changed
-# to resolve bug 22991, creating a significant slowdown.  Given current speed
-# problems.  Once 16320 is resolved, this section should be dealt with.
-# -- rjbs, 2006-11-11
-#my $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
-
-# XXX: ...and the above solution caused endless problems (never returned) when
-# examining this address, now in a test:
-#   admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog-- ATAT --test.socialtext.com
-# So we disallow the hateful CFWS in this context for now.  Of modern mail
-# agents, only Apple Web Mail 2.0 is known to produce obs-phrase.
-# -- rjbs, 2006-11-19
-my $simple_word    = qr/$atom|\.|\s*"$qcontent+"\s*/;
-my $obs_phrase     = qr/$simple_word+/;
-
+my $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
 my $phrase         = qr/$obs_phrase|(?:$word+)/;
 
 my $local_part     = qr/$dot_atom|$quoted_string/;
-my $dtext          = qr/[^\[\]\\]/;
-my $dcontent       = qr/$dtext|$quoted_pair/;
-my $domain_literal = qr/$cfws*\[(?:\s*$dcontent)*\s*\]$cfws*/;
+my $dtext          = qr/[^$CTL\[\]\\]/;
+my $domain_literal = qr/$cfws*\[$dtext*\]$cfws*/;
 my $domain         = qr/$dot_atom|$domain_literal/;
 
 my $display_name   = $phrase;
@@ -127,7 +110,7 @@ following comment.
 our $addr_spec  = qr/$local_part\@$domain/;
 our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
 our $name_addr  = qr/(?>$display_name?)$angle_addr/;
-our $mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
+our $mailbox    = qr/$name_addr|$addr_spec/;
 
 sub _PHRASE   () { 0 }
 sub _ADDRESS  () { 1 }
