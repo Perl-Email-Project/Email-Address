@@ -55,7 +55,7 @@ my $domain         = qr/$dot_atom|$domain_literal/;
 my $display_name   = $phrase;
 
 # This is for extracting comments, but not from inside quoted strings or domain
-# literals.
+# literals; or quoted strings from in phrases.
 my $parts = qr/("(?>$qcontent*)")|(\[(?>$dtext*)\])|$comment|([^\["(]+)/;
 
 =head2 Package Variables
@@ -205,7 +205,17 @@ sub parse {
         $_ = undef unless length $_;
       }
 
-      $phrase =~ s/\\(.)/$1/g if $phrase;
+      $new = '';
+      while ($phrase && $phrase =~ /$parts/go) {
+        my ($q, $d, $c, $o) = ($1, $2, $3, $4);
+        $new .= $d, next if $d; # Shouldn't be any
+        $new .= $c, next if $c; # Shouldn't be any
+        $new .= $o, next if $o;
+        $q =~ s/\A"(.+)"\z/$1/;
+        $q =~ s/\\(.)/$1/g;
+        $new .= $q;
+      }
+      $phrase = $new if $new;
 
       my $new_comment = join q{ }, @comments;
       push @addrs,
@@ -226,15 +236,26 @@ sub parse {
 Constructs and returns a new C<Email::Address> object. Takes four
 positional arguments: phrase, email, and comment, and original string.
 
+If phrase starts and ends with quotes, the phrase will be assumed to be a
+quoted string. Otherwise it will be treated as is.
+
 The original string should only really be set using C<parse>.
 
 =cut
 
 sub new {
   my ($class, $phrase, $email, $comment, $orig) = @_;
-  $phrase =~ s/\A"(.+)"\z/$1/ if $phrase;
+  $phrase = _dephrase($phrase) if $phrase;
 
   bless [ $phrase, $email, $comment, $orig ] => $class;
+}
+
+sub _dephrase {
+    my $phrase = shift;
+    return $phrase unless $phrase =~ /\A"(.+)"\z/;
+    $phrase =~ s/\A"(.+)"\z/$1/;
+    $phrase =~ s/($quoted_pair)/substr $1, -1/goe;
+    return $phrase;
 }
 
 =item purge_cache
@@ -408,7 +429,7 @@ sub _enquoted_phrase {
   # if it's encoded -- rjbs, 2007-02-28
   return $phrase if $phrase =~ /\A=\?.+\?=\z/;
 
-  $phrase =~ s/\A"(.+)"\z/$1/;
+  $phrase = _dephrase($phrase);
   $phrase =~ s/([\\"])/\\$1/g;
 
   return qq{"$phrase"};
@@ -436,9 +457,7 @@ sub name {
     my ($self) = @_;
     my $name = q{};
     if ( $name = $self->[_PHRASE] ) {
-        $name =~ s/^"//;
-        $name =~ s/"$//;
-        $name =~ s/($quoted_pair)/substr $1, -1/goe;
+        $name = _dephrase($name);
     } elsif ( $name = $self->[_COMMENT] ) {
         $name =~ s/^\(//;
         $name =~ s/\)$//;

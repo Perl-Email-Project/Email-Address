@@ -1649,6 +1649,26 @@ my @list = (
       ],
     ]
   ],
+  [
+    q{Matthew "the" Example <matthew-- ATAT --example.org>},
+    [
+      [
+        'Matthew the Example',
+        'matthew-- ATAT --example.org',
+        undef,
+      ],
+    ],
+  ],
+  [
+    q{"Matthew" the "Example" <matthew-- ATAT --example.org>},
+    [
+      [
+        'Matthew the Example',
+        'matthew-- ATAT --example.org',
+        undef,
+      ],
+    ],
+  ],
 );
 
 my $tests = 1;
