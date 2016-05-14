@@ -1488,9 +1488,9 @@ my @list = (
     '"Greg Norris (humble visionary genius)" <nextrightmove-- ATAT --bang.example.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
-        'Greg Norris ',
+        'Greg Norris (humble visionary genius)',
         'nextrightmove-- ATAT --bang.example.net',
-        '(humble visionary genius)'
+        undef,
       ],
       [
         undef,
@@ -1638,6 +1638,16 @@ my @list = (
         'Matthew (GSC)',
       ],
     ],
+  ],
+  [
+    q{"John (imperator) Doe" <john.doe-- ATAT --example.com> (Comment with "quotes"!)},
+    [
+      [
+        'John (imperator) Doe',
+        'john.doe-- ATAT --example.com',
+        'Comment with "quotes"!',
+      ],
+    ]
   ],
 );
 

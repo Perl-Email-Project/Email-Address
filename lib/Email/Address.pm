@@ -54,6 +54,10 @@ my $domain         = qr/$dot_atom|$domain_literal/;
 
 my $display_name   = $phrase;
 
+# This is for extracting comments, but not from inside quoted strings or domain
+# literals.
+my $parts = qr/("(?>$qcontent*)")|(\[(?>$dtext*)\])|$comment|([^\["(]+)/;
+
 =head2 Package Variables
 
 B<ACHTUNG!>  Email isn't easy (if even possible) to parse with a regex, I<at
@@ -175,8 +179,16 @@ sub parse {
       local $_ = $+{mailbox};
       my $original = $_;
 
-      my @comments = /$comment/go;
-      s/$comment//go if @comments;
+      my @comments;
+      my $new = '';
+      while (/$parts/go) {
+          my ($q, $d, $c, $o) = ($1, $2, $3, $4);
+          $new .= $q, next if $q;
+          $new .= $d, next if $d;
+          $new .= $o, next if $o;
+          push @comments, $c;
+      }
+      $_ = $new;
 
       my ($user, $host, $com);
       ($user, $host) = ($+{user}, $+{host}) if s/<(?<user>$local_part)\@(?<host>$domain)>\s*\z//o;
