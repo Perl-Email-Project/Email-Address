@@ -105,9 +105,9 @@ following comment.
 
 =cut
 
-our $addr_spec  = qr/$local_part\@$domain/;
+our $addr_spec  = qr/(?<local_part>$local_part)\@(?<domain>$domain)/;
 our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
-our $name_addr  = qr/$display_name?$angle_addr/;
+our $name_addr  = qr/(?<display_name>$display_name?)$angle_addr/;
 our $mailbox    = qr/$name_addr|$addr_spec/;
 
 sub _PHRASE   () { 0 }
@@ -178,6 +178,14 @@ sub parse {
     while ($line =~ /(?<mailbox>$mailbox)/go) {
       local $_ = $+{mailbox};
       my $original = $_;
+      my $phrase = $+{display_name};
+      my $user = $+{local_part};
+      my $host = $+{domain};
+
+      unless ($UNICODE) {
+          next if $user =~ /\P{ASCII}/;
+          next if $host =~ /\P{ASCII}/;
+      }
 
       my @comments;
       my $new = '';
@@ -189,20 +197,6 @@ sub parse {
           push @comments, $c;
       }
       $_ = $new;
-
-      my ($user, $host, $com);
-      ($user, $host) = ($+{user}, $+{host}) if s/<(?<user>$local_part)\@(?<host>$domain)>\s*\z//o;
-      if (! defined($user) || ! defined($host)) {
-          s/(?<user>$local_part)\@(?<host>$domain)//o;
-          ($user, $host) = ($+{user}, $+{host});
-      }
-
-      unless ($UNICODE) {
-          next if $user =~ /\P{ASCII}/;
-          next if $host =~ /\P{ASCII}/;
-      }
-
-      my ($phrase)       = /($display_name)/o;
 
       for ( $phrase, $host, $user, @comments ) {
         next unless defined $_;
