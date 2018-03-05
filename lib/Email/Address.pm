@@ -18,11 +18,13 @@ our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
 
 =head1 DESCRIPTION
 
-B<ACHTUNG!> This module is deprecated. Use L<B<Email::Address::XS>|Email::Address::XS>
-instead which has backward compatible API. This module is vulnerable to
-L<CVE-2015-7686 (Algorithmic complexity vulnerability)|https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-7686>
-which allows remote attackers to cause denial of service. This module has not
-been developed since 2015.
+B<ACHTUNG!> This module has a vulnerability
+(L<CVE-2015-7686|https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-7686>)
+which allows remote attackers to cause denial of service.   In other words,
+sometimes it takes way too long to process certain kinds of input.  Maybe
+someday this will be fixed.  Until then, use
+L<B<Email::Address::XS>|Email::Address::XS> instead which has backward
+compatible API.
 
 This class implements a regex-based RFC 2822 parser that locates email
 addresses in strings and returns a list of C<Email::Address> objects found.
@@ -159,13 +161,8 @@ sub __dump {
     q[me@local, Casey <me@local>, "Casey" <me@local> (West)]
   );
 
-B<ACHTUNG!> This method is vulnerable to
-L<CVE-2015-7686 (Algorithmic complexity vulnerability)|https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-7686>
-which allows remote attackers to cause denial of service. Do not use this
-method with untrusted user input.
-
-B<ACHTUNG!> This method is broken and does not parse list of email addresses
-correctly. Do not use it also when you expect correct output.
+B<ACHTUNG!> This is where that vulnerability mentioned above lies.  Do not use
+this method with untrusted user input.
 
 Use method L<parse from the Email::Address::XS module|Email::Address::XS/parse>
 instead.
@@ -215,7 +212,6 @@ sub __cache_parse {
     $PARSE_CACHE{$line} = $addrs;
 }
 
-my $parse_warned;
 sub parse {
     my ($class, $line) = @_;
     return unless $line;
@@ -224,11 +220,6 @@ sub parse {
 
     if (my @cached = $class->__get_cached_parse($line)) {
         return @cached;
-    }
-
-    unless ($parse_warned) {
-      warn "Email::Address->parse() is vulnerable to CVE-2015-7686. Use Email::Address::XS->parse() instead.\n";
-      $parse_warned = 1;
     }
 
     my (@mailboxes) = ($line =~ /$mailbox/go);
