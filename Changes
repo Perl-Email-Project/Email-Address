@@ -1,6 +1,7 @@
 Release history for Email-Address
 
 {{$NEXT}}
+        - add some docs saying "don't use this, it can be busted"
 
 1.908     2015-09-19 22:53:38-04:00 America/New_York
         - default to 1 level of nested comments to avoid pathological behaviors
