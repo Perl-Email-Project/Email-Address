@@ -3,9 +3,8 @@ use warnings;
 package Email::Address;
 # ABSTRACT: (DEPRECATED) RFC 2822 Address Parsing and Creation
 
-our $COMMENT_NEST_LEVEL ||= 1;
-our $STRINGIFY          ||= 'format';
-our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
+our $STRINGIFY ||= 'format';
+our $UNICODE   ||= 0;
 
 =head1 SYNOPSIS
 
@@ -36,53 +35,36 @@ to be correct, and very very fast.
 my $CTL            = q{\x00-\x1F\x7F};
 my $special        = q{()<>\\[\\]:;@\\\\,."};
 
-my $text           = qr/[^\x0A\x0D]/;
+my $quoted_pair    = qr/\\[[:graph:] \t]/;
 
-my $quoted_pair    = qr/\\$text/;
-
-my $ctext          = qr/(?>[^()\\]+)/;
-my ($ccontent, $comment) = (q{})x2;
-for (1 .. $COMMENT_NEST_LEVEL) {
-  $ccontent = qr/$ctext|$quoted_pair|$comment/;
-  $comment  = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
-}
-my $cfws           = qr/$comment|\s+/;
+my $ctext          = qr/[^$CTL()\\]/;
+my $comment        = qr/(?<comment>\((?:$ctext|$quoted_pair|(?&comment))*\))/;
+my $cfws           = qr/(?>$comment|\s+)/;
 
 my $atext          = qq/[^$CTL$special\\s]/;
-my $atom           = qr/$cfws*$atext+$cfws*/;
+my $atom           = qr/$cfws*(?>$atext+)$cfws*/;
 my $dot_atom_text  = qr/$atext+(?:\.$atext+)*/;
-my $dot_atom       = qr/$cfws*$dot_atom_text$cfws*/;
+my $dot_atom       = qr/$cfws*(?>$dot_atom_text)$cfws*/;
 
-my $qtext          = qr/[^\\"]/;
+my $qtext          = qr/[^$CTL\\"]/;
 my $qcontent       = qr/$qtext|$quoted_pair/;
-my $quoted_string  = qr/$cfws*"$qcontent*"$cfws*/;
+my $quoted_string  = qr/$cfws*"(?>$qcontent*)"$cfws*/;
 
 my $word           = qr/$atom|$quoted_string/;
 
-# XXX: This ($phrase) used to just be: my $phrase = qr/$word+/; It was changed
-# to resolve bug 22991, creating a significant slowdown.  Given current speed
-# problems.  Once 16320 is resolved, this section should be dealt with.
-# -- rjbs, 2006-11-11
-#my $obs_phrase     = qr/$word(?:$word|\.|$cfws)*/;
-
-# XXX: ...and the above solution caused endless problems (never returned) when
-# examining this address, now in a test:
-#   admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog-- ATAT --test.socialtext.com
-# So we disallow the hateful CFWS in this context for now.  Of modern mail
-# agents, only Apple Web Mail 2.0 is known to produce obs-phrase.
-# -- rjbs, 2006-11-19
-my $simple_word    = qr/$atom|\.|\s*"$qcontent+"\s*/;
-my $obs_phrase     = qr/$simple_word+/;
-
-my $phrase         = qr/$obs_phrase|(?:$word+)/;
+my $obs_phrase     = qr/$word(?>(?:$word|\.|$cfws)*)/;
+my $phrase         = qr/$obs_phrase|(?>$word+)/;
 
 my $local_part     = qr/$dot_atom|$quoted_string/;
-my $dtext          = qr/[^\[\]\\]/;
-my $dcontent       = qr/$dtext|$quoted_pair/;
-my $domain_literal = qr/$cfws*\[(?:\s*$dcontent)*\s*\]$cfws*/;
+my $dtext          = qr/[^$CTL\[\]\\]/;
+my $domain_literal = qr/$cfws*\[(?>$dtext*)\]$cfws*/;
 my $domain         = qr/$dot_atom|$domain_literal/;
 
 my $display_name   = $phrase;
+
+# This is for extracting comments, but not from inside quoted strings or domain
+# literals; or quoted strings from in phrases.
+my $parts = qr/("(?>$qcontent*)")|(\[(?>$dtext*)\])|$comment|([^\["(]+)/;
 
 =head2 Package Variables
 
@@ -131,10 +113,10 @@ following comment.
 
 =cut
 
-our $addr_spec  = qr/$local_part\@$domain/;
+our $addr_spec  = qr/(?<local_part>$local_part)\@(?<domain>$domain)/;
 our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
-our $name_addr  = qr/(?>$display_name?)$angle_addr/;
-our $mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
+our $name_addr  = qr/(?<display_name>$display_name?)$angle_addr/;
+our $mailbox    = qr/$name_addr|$addr_spec/;
 
 sub _PHRASE   () { 0 }
 sub _ADDRESS  () { 1 }
@@ -171,24 +153,10 @@ This method returns a list of C<Email::Address> objects it finds in the input
 string.  B<Please note> that it returns a list, and expects that it may find
 multiple addresses.  The behavior in scalar context is undefined.
 
-The specification for an email address allows for infinitely nestable comments.
-That's nice in theory, but a little over done.  By default this module allows
-for one (C<1>) level of nested comments. If you think you need more, modify the
-C<$Email::Address::COMMENT_NEST_LEVEL> package variable to allow more.
-
-  $Email::Address::COMMENT_NEST_LEVEL = 10; # I'm deep
-
-The reason for this hardly-limiting limitation is simple: efficiency.
-
-Long strings of whitespace can be problematic for this module to parse, a bug
-which has not yet been adequately addressed.  The default behavior is now to
-collapse multiple spaces into a single space, which avoids this problem.  To
-prevent this behavior, set C<$Email::Address::COLLAPSE_SPACES> to zero.  This
-variable will go away when the bug is resolved properly.
-
-In accordance with RFC 822 and its descendants, this module demands that email
-addresses be ASCII only.  Any non-ASCII content in the parsed addresses will
-cause the parser to return no results.
+By default, this module mandates that email addresses be ASCII only, and any
+non-ASCII content will cause a blank result. This matches RFCs 822, 2822, and
+5322. If you wish to allow UTF-8 characters in email, as per RFCs 5335 and
+6532, set C<$Email:Address::UNICODE> to 1.
 
 =cut
 
@@ -216,31 +184,33 @@ sub parse {
     my ($class, $line) = @_;
     return unless $line;
 
-    $line =~ s/[ \t]+/ /g if $COLLAPSE_SPACES;
-
     if (my @cached = $class->__get_cached_parse($line)) {
         return @cached;
     }
 
-    my (@mailboxes) = ($line =~ /$mailbox/go);
     my @addrs;
-    foreach (@mailboxes) {
+    while ($line =~ /(?<mailbox>$mailbox)/go) {
+      local $_ = $+{mailbox};
       my $original = $_;
+      my $phrase = $+{display_name};
+      my $user = $+{local_part};
+      my $host = $+{domain};
 
-      my @comments = /($comment)/go;
-      s/$comment//go if @comments;
-
-      my ($user, $host, $com);
-      ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>\s*\z//o;
-      if (! defined($user) || ! defined($host)) {
-          s/($local_part)\@($domain)//o;
-          ($user, $host) = ($1, $2);
+      unless ($UNICODE) {
+          next if $user =~ /\P{ASCII}/;
+          next if $host =~ /\P{ASCII}/;
       }
 
-      next if $user =~ /\P{ASCII}/;
-      next if $host =~ /\P{ASCII}/;
-
-      my ($phrase)       = /($display_name)/o;
+      my @comments;
+      my $new = '';
+      while (/$parts/go) {
+          my ($q, $d, $c, $o) = ($1, $2, $3, $4);
+          $new .= $q, next if $q;
+          $new .= $d, next if $d;
+          $new .= $o, next if $o;
+          push @comments, $c;
+      }
+      $_ = $new;
 
       for ( $phrase, $host, $user, @comments ) {
         next unless defined $_;
@@ -249,7 +219,17 @@ sub parse {
         $_ = undef unless length $_;
       }
 
-      $phrase =~ s/\\(.)/$1/g if $phrase;
+      $new = '';
+      while ($phrase && $phrase =~ /$parts/go) {
+        my ($q, $d, $c, $o) = ($1, $2, $3, $4);
+        $new .= $d, next if $d; # Shouldn't be any
+        $new .= $c, next if $c; # Shouldn't be any
+        $new .= $o, next if $o;
+        $q =~ s/\A"(.+)"\z/$1/;
+        $q =~ s/\\(.)/$1/g;
+        $new .= $q;
+      }
+      $phrase = $new if $new;
 
       my $new_comment = join q{ }, @comments;
       push @addrs,
@@ -270,15 +250,26 @@ sub parse {
 Constructs and returns a new C<Email::Address> object. Takes four
 positional arguments: phrase, email, and comment, and original string.
 
+If phrase starts and ends with quotes, the phrase will be assumed to be a
+quoted string. Otherwise it will be treated as is.
+
 The original string should only really be set using C<parse>.
 
 =cut
 
 sub new {
   my ($class, $phrase, $email, $comment, $orig) = @_;
-  $phrase =~ s/\A"(.+)"\z/$1/ if $phrase;
+  $phrase = _dephrase($phrase) if $phrase;
 
   bless [ $phrase, $email, $comment, $orig ] => $class;
+}
+
+sub _dephrase {
+    my $phrase = shift;
+    return $phrase unless $phrase =~ /\A"(.+)"\z/;
+    $phrase =~ s/\A"(.+)"\z/$1/;
+    $phrase =~ s/($quoted_pair)/substr $1, -1/goe;
+    return $phrase;
 }
 
 =item purge_cache
@@ -452,7 +443,7 @@ sub _enquoted_phrase {
   # if it's encoded -- rjbs, 2007-02-28
   return $phrase if $phrase =~ /\A=\?.+\?=\z/;
 
-  $phrase =~ s/\A"(.+)"\z/$1/;
+  $phrase = _dephrase($phrase);
   $phrase =~ s/([\\"])/\\$1/g;
 
   return qq{"$phrase"};
@@ -480,9 +471,7 @@ sub name {
     my ($self) = @_;
     my $name = q{};
     if ( $name = $self->[_PHRASE] ) {
-        $name =~ s/^"//;
-        $name =~ s/"$//;
-        $name =~ s/($quoted_pair)/substr $1, -1/goe;
+        $name = _dephrase($name);
     } elsif ( $name = $self->[_COMMENT] ) {
         $name =~ s/^\(//;
         $name =~ s/\)$//;

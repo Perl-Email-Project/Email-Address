@@ -1488,9 +1488,9 @@ my @list = (
     '"Greg Norris (humble visionary genius)" <nextrightmove-- ATAT --bang.example.net>, <advocacy-- ATAT --p.example.org>',
     [
       [
-        'Greg Norris',
+        'Greg Norris (humble visionary genius)',
         'nextrightmove-- ATAT --bang.example.net',
-        '(humble visionary genius)'
+        undef,
       ],
       [
         undef,
@@ -1625,6 +1625,46 @@ my @list = (
       [
         '<fake-- ATAT --bogus.biz>',
         'real-- ATAT --actual.mil',
+        undef,
+      ],
+    ],
+  ],
+  [
+    q{"Matthew" <matthew-- ATAT --example.org> (Matthew (GSC))},
+    [
+      [
+        'Matthew',
+        'matthew-- ATAT --example.org',
+        'Matthew (GSC)',
+      ],
+    ],
+  ],
+  [
+    q{"John (imperator) Doe" <john.doe-- ATAT --example.com> (Comment with "quotes"!)},
+    [
+      [
+        'John (imperator) Doe',
+        'john.doe-- ATAT --example.com',
+        'Comment with "quotes"!',
+      ],
+    ]
+  ],
+  [
+    q{Matthew "the" Example <matthew-- ATAT --example.org>},
+    [
+      [
+        'Matthew the Example',
+        'matthew-- ATAT --example.org',
+        undef,
+      ],
+    ],
+  ],
+  [
+    q{"Matthew" the "Example" <matthew-- ATAT --example.org>},
+    [
+      [
+        'Matthew the Example',
+        'matthew-- ATAT --example.org',
         undef,
       ],
     ],
