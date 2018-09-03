@@ -570,5 +570,9 @@ performance.
 Thanks to Kevin Riggle and Tatsuhiko Miyagawa for tests for annoying
 phrase-quoting bugs!
 
+=head1 SEE ALSO
+
+L<Email::Address::XS>|Email::Address::XS>
+
 =cut
 
