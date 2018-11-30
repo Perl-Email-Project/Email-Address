@@ -44,18 +44,18 @@ my $ctext          = qr/(?>[^()\\]+)/;
 my ($ccontent, $comment) = (q{})x2;
 for (1 .. $COMMENT_NEST_LEVEL) {
   $ccontent = qr/$ctext|$quoted_pair|$comment/;
-  $comment  = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
+  $comment  = qr/(?>\s*\((?:\s*$ccontent)*\s*\)\s*)/;
 }
-my $cfws           = qr/$comment|\s+/;
+my $cfws           = qr/$comment|(?>\s+)/;
 
 my $atext          = qq/[^$CTL$special\\s]/;
-my $atom           = qr/$cfws*$atext+$cfws*/;
-my $dot_atom_text  = qr/$atext+(?:\.$atext+)*/;
-my $dot_atom       = qr/$cfws*$dot_atom_text$cfws*/;
+my $atom           = qr/(?>$cfws*$atext+$cfws*)/;
+my $dot_atom_text  = qr/(?>$atext+(?:\.$atext+)*)/;
+my $dot_atom       = qr/(?>$cfws*$dot_atom_text$cfws*)/;
 
 my $qtext          = qr/[^\\"]/;
 my $qcontent       = qr/$qtext|$quoted_pair/;
-my $quoted_string  = qr/$cfws*"$qcontent*"$cfws*/;
+my $quoted_string  = qr/(?>$cfws*"$qcontent*"$cfws*)/;
 
 my $word           = qr/$atom|$quoted_string/;
 
@@ -71,15 +71,15 @@ my $word           = qr/$atom|$quoted_string/;
 # So we disallow the hateful CFWS in this context for now.  Of modern mail
 # agents, only Apple Web Mail 2.0 is known to produce obs-phrase.
 # -- rjbs, 2006-11-19
-my $simple_word    = qr/$atom|\.|\s*"$qcontent+"\s*/;
-my $obs_phrase     = qr/$simple_word+/;
+my $simple_word    = qr/(?>$atom|\.|\s*"$qcontent+"\s*)/;
+my $obs_phrase     = qr/(?>$simple_word+)/;
 
-my $phrase         = qr/$obs_phrase|(?:$word+)/;
+my $phrase         = qr/$obs_phrase|(?>$word+)/;
 
 my $local_part     = qr/$dot_atom|$quoted_string/;
 my $dtext          = qr/[^\[\]\\]/;
 my $dcontent       = qr/$dtext|$quoted_pair/;
-my $domain_literal = qr/$cfws*\[(?:\s*$dcontent)*\s*\]$cfws*/;
+my $domain_literal = qr/(?>$cfws*\[(?:\s*$dcontent)*\s*\]$cfws*)/;
 my $domain         = qr/$dot_atom|$domain_literal/;
 
 my $display_name   = $phrase;
@@ -132,9 +132,9 @@ following comment.
 =cut
 
 our $addr_spec  = qr/$local_part\@$domain/;
-our $angle_addr = qr/$cfws*<$addr_spec>$cfws*/;
+our $angle_addr = qr/(?>$cfws*<$addr_spec>$cfws*)/;
 our $name_addr  = qr/(?>$display_name?)$angle_addr/;
-our $mailbox    = qr/(?:$name_addr|$addr_spec)$comment*/;
+our $mailbox    = qr/(?:$name_addr|$addr_spec)(?>$comment*)/;
 
 sub _PHRASE   () { 0 }
 sub _ADDRESS  () { 1 }
