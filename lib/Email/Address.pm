@@ -224,7 +224,8 @@ sub parse {
 
     my %mailboxes;
     my $str = $line;
-    $str =~ s!($name_addr(?>$comment*))!$mailboxes{pos($str)} = $1; ',' x length $1!ego;
+    $str =~ s!($name_addr(?>$comment*))!$mailboxes{pos($str)} = $1; ',' x length $1!ego
+        if $str =~ /$angle_addr/;
     $str =~ s!($addr_spec(?>$comment*))!$mailboxes{pos($str)} = $1; ',' x length $1!ego;
     my @mailboxes = map { $mailboxes{$_} } sort { $a <=> $b } keys %mailboxes;
 
