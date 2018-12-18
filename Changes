@@ -1,6 +1,7 @@
 Release history for Email-Address
 
 {{$NEXT}}
+        - update parsing to mitigate pathological cases (thanks, sunnavy!)
 
 1.909     2018-03-04 22:07:12-05:00 America/New_York
         - add some docs saying "don't use this, it can be busted"
