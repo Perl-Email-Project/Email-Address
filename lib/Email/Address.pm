@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Email::Address;
-# ABSTRACT: (DEPRECATED) RFC 2822 Address Parsing and Creation
+# ABSTRACT: RFC 2822 Address Parsing and Creation
 
 our $COMMENT_NEST_LEVEL ||= 1;
 our $STRINGIFY          ||= 'format';
@@ -18,18 +18,21 @@ our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
 
 =head1 DESCRIPTION
 
-B<ACHTUNG!> This module has a vulnerability
-(L<CVE-2015-7686|https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-7686>)
-which allows remote attackers to cause denial of service.   In other words,
-sometimes it takes way too long to process certain kinds of input.  Maybe
-someday this will be fixed.  Until then, use
-L<B<Email::Address::XS>|Email::Address::XS> instead which has backward
-compatible API.
-
 This class implements a regex-based RFC 2822 parser that locates email
 addresses in strings and returns a list of C<Email::Address> objects found.
 Alternatively you may construct objects manually. The goal of this software is
 to be correct, and very very fast.
+
+Version 1.909 and earlier of this module had vulnerabilies
+(L<CVE-2015-7686|https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-7686>)
+and (L<CVE-2015-12558|https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-12558>)
+which allowed specially constructed email to cause a denial of service. The
+reported vulnerabilities and some other pathalogical cases (meaning they really
+shouldn't occur in normal email) have been addressed in version 1.910 and newer.
+If you're running version 1.909 or older, you should update!
+
+Alternatively, you could switch to L<B<Email::Address::XS>|Email::Address::XS>
+which has a backward compatible API.
 
 =cut
 
@@ -160,12 +163,6 @@ sub __dump {
   my @addrs = Email::Address->parse(
     q[me@local, Casey <me@local>, "Casey" <me@local> (West)]
   );
-
-B<ACHTUNG!> This is where that vulnerability mentioned above lies.  Do not use
-this method with untrusted user input.
-
-Use method L<parse from the Email::Address::XS module|Email::Address::XS/parse>
-instead.
 
 This method returns a list of C<Email::Address> objects it finds in the input
 string.  B<Please note> that it returns a list, and expects that it may find
