@@ -2,6 +2,9 @@ Release history for Email-Address
 
 {{$NEXT}}
 
+1.911     2018-12-22 11:30:28-05:00 America/New_York
+        - just like 1.910, but with doc updates and undeprecation by Jim Brandt
+
 1.910     2018-12-17 21:27:28-05:00 America/New_York (TRIAL RELEASE)
         - update parsing to mitigate pathological cases (thanks, sunnavy!)
 
