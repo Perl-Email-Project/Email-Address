@@ -1,6 +1,7 @@
 Release history for Email-Address
 
 {{$NEXT}}
+        - include the doc updates from 1.911 changelog, oops!
 
 1.911     2018-12-22 11:30:28-05:00 America/New_York
         - just like 1.910, but with doc updates and undeprecation by Jim Brandt
