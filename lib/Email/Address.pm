@@ -1,11 +1,11 @@
-use strict;
+use v5.12.0;
 use warnings;
 package Email::Address;
 # ABSTRACT: RFC 2822 Address Parsing and Creation
 
 our $COMMENT_NEST_LEVEL ||= 1;
 our $STRINGIFY          ||= 'format';
-our $COLLAPSE_SPACES      = 1 unless defined $COLLAPSE_SPACES; # I miss //=
+our $COLLAPSE_SPACES    //= 1;
 
 =head1 SYNOPSIS
 
@@ -32,7 +32,7 @@ shouldn't occur in normal email) have been addressed in version 1.910 and newer.
 If you're running version 1.909 or older, you should update!
 
 Alternatively, you could switch to L<B<Email::Address::XS>|Email::Address::XS>
-which has a backward compatible API.
+which has a backward compatible API. B<Why not just use that?>
 
 =cut
 
@@ -423,20 +423,16 @@ sub format {
 sub _format {
     my ($self) = @_;
 
-    unless (
-      defined $self->[_PHRASE] && length $self->[_PHRASE]
-      ||
-      defined $self->[_COMMENT] && length $self->[_COMMENT]
-    ) {
-        return defined $self->[_ADDRESS] ? $self->[_ADDRESS] : '';
+    unless (length $self->[_PHRASE] || length $self->[_COMMENT]) {
+        return $self->[_ADDRESS] // '';
     }
 
-    my $comment = defined $self->[_COMMENT] ? $self->[_COMMENT] : '';
+    my $comment = $self->[_COMMENT] // '';
     $comment = "($comment)" if length $comment and $comment !~ /\A\(.*\)\z/;
 
     my $format = sprintf q{%s <%s> %s},
                  $self->_enquoted_phrase,
-                 (defined $self->[_ADDRESS] ? $self->[_ADDRESS] : ''),
+                 ($self->[_ADDRESS] // ''),
                  $comment;
 
     $format =~ s/^\s+//;
@@ -450,7 +446,7 @@ sub _enquoted_phrase {
 
   my $phrase = $self->[_PHRASE];
 
-  return '' unless defined $phrase and length $phrase;
+  return '' unless length $phrase;
 
   # if it's encoded -- rjbs, 2007-02-28
   return $phrase if $phrase =~ /\A=\?.+\?=\z/;
