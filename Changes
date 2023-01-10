@@ -1,6 +1,8 @@
 Release history for Email-Address
 
 {{$NEXT}}
+
+1.913     2023-01-09 19:41:25-05:00 America/New_York
         - as ever, you should probably use Email::Address::XS instead
         - this version now requires Perl v5.12
         - some small tweaks to the code to take advantage of v5.12 made
