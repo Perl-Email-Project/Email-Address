@@ -2,7 +2,7 @@ use v5.12;
 use warnings;
 
 use Email::Address;
-use Test::More tests => 13;
+use Test::More;
 
 my $phrase = q{jack!work};
 my $email  = 'jack@work.com';
@@ -71,3 +71,5 @@ is(
   q{<Y@example.mil> (0)},
   'we do not provide an empty phrase',
 );
+
+done_testing;

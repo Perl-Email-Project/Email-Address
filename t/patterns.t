@@ -48,8 +48,6 @@ my %tests = (
 
 my $num_tests = scalar( map @{$_}, values %tests );
 
-plan tests => $num_tests + 1;
-
 use_ok 'Email::Address';
 
 my %pats = map {
@@ -65,3 +63,5 @@ for my $pattern_name (keys %tests) {
         ok( $expect_bool ? $result : !$result , "pat $pattern_name: $string" );
     }
 }
+
+done_testing;

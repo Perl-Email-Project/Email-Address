@@ -48,9 +48,9 @@ my @tests = (
   ],
 );
 
-plan tests => scalar @tests;
-
 for (@tests) {
   my $addr = Email::Address->new( @{ $_->[0] } );
   is( $addr->format, $_->[1], "format: $_->[1]" );
 }
+
+done_testing;

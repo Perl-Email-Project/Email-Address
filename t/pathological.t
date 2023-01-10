@@ -18,4 +18,4 @@ for my $name ( sort keys %cases ) {
     ok( $time < 0.5, "Parsing '$name' takes less than 0.5 second($time)" );
 }
 
-done_testing();
+done_testing;

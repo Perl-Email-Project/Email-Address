@@ -1635,8 +1635,6 @@ my @list = (
 my $tests = 1;
 $tests += @list;
 
-plan tests => $tests;
-
 use_ok 'Email::Address';
 
 for my $i (0 .. $#list) {
@@ -1676,3 +1674,5 @@ for my $i (0 .. $#list) {
     }
   }
 }
+
+done_testing;
