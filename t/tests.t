@@ -1,6 +1,7 @@
-use Test::More;
-use strict;
+use v5.12;
 use warnings;
+
+use Test::More;
 
 # This is a corpus of addresses to test.  Each element of @list is a pair of
 # input and expected output.  The input is a string that will be given to

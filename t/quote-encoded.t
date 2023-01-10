@@ -1,5 +1,5 @@
-#!perl
-use strict;
+use v5.12;
+use warnings;
 
 # This test graciously donated by Tatsuhiko Miyagawa.  All praise MIYAGAWA!
 

@@ -1,5 +1,5 @@
-#!perl
-use strict;
+use v5.12;
+use warnings;
 
 use Email::Address;
 use Test::More tests => 13;

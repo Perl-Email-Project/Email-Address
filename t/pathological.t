@@ -1,5 +1,6 @@
-use strict;
+use v5.12;
 use warnings;
+
 use Test::More;
 use Email::Address;
 use Time::HiRes 'time';

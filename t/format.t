@@ -1,6 +1,7 @@
+use v5.12;
+use warnings;
+
 use Test::More;
-use strict;
-$^W = 1;
 
 use Email::Address;
 

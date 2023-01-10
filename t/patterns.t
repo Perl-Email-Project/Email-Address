@@ -1,6 +1,7 @@
+use v5.12;
+use warnings;
+
 use Test::More;
-use strict;
-use warnings FATAL => 'all';
 
 =for comment
 
