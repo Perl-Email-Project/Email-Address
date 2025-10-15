@@ -54,7 +54,11 @@ my $cfws           = qr/$comment|(?>\s+)/;
 my $atext          = qq/[^$CTL$special\\s]/;
 my $atom           = qr/(?>$cfws*$atext+$cfws*)/;
 my $dot_atom_text  = qr/(?>$atext+(?:\.$atext+)*)/;
+my $fqdn_atom_text = qr/(?>$atext+\.$atext+(?:\.$atext+)*)/;  # Requires at least one dot
+my $localhost_text = qr/localhost/i;
 my $dot_atom       = qr/(?>$cfws*$dot_atom_text$cfws*)/;
+my $fqdn_atom      = qr/(?>$cfws*$fqdn_atom_text$cfws*)/;
+my $localhost_atom = qr/(?>$cfws*$localhost_text$cfws*)/;
 
 my $qtext          = qr/[^\\"]/;
 my $qcontent       = qr/$qtext|$quoted_pair/;
@@ -83,7 +87,7 @@ my $local_part     = qr/$dot_atom|$quoted_string/;
 my $dtext          = qr/[^\[\]\\]/;
 my $dcontent       = qr/$dtext|$quoted_pair/;
 my $domain_literal = qr/(?>$cfws*\[(?:\s*$dcontent)*\s*\]$cfws*)/;
-my $domain         = qr/$dot_atom|$domain_literal/;
+my $domain         = qr/$fqdn_atom|$localhost_atom|$domain_literal/;
 
 my $display_name   = $phrase;
 
